@@ -1,5 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 def login_view(request):
-	return HttpResponse("Login Page")
+	context = {}
+	return render(request, 'accounts/login.html', context)
+
+def register_view(request):
+	context = {}
+	return render(request, 'accounts/register.html', context)

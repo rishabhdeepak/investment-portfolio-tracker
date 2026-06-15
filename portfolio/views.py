@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 def portfolio(request):
-	return HttpResponse("Portfolio")
+	context = {}
+	return render(request, 'portfolio/portfolio.html', context)
