@@ -9,7 +9,6 @@ A Django web application for tracking personal investment portfolios. Users can 
 ## Features
 
 ### Currently Working
-- User authentication (register, login, logout)
 - Add, edit, and delete stock holdings manually
 - Portfolio dashboard
 
