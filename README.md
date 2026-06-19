@@ -1,57 +1,68 @@
 # WealthTrack — Investment Portfolio Tracker
 
-A Django web application for tracking personal investment portfolios. Users can manage their stock holdings, monitor performance, and gain insight into their portfolio composition.
+A Django web application for tracking personal investments across stocks, mutual funds, ETFs, and more.
+Users can manage multiple portfolios, log transactions, and monitor their holdings from a single dashboard.
 
-> 🚧 **Active Development** — Core functionality is working. Features like live market data, REST API, and charts are in progress.
+> 🚧 **Active Development** — Authentication is working. Portfolio models and dashboard are in progress.
+
+---
+
+## What Makes This Different
+
+Most portfolio trackers only handle stocks. WealthTrack is designed for multiple asset classes — stocks, mutual funds, ETFs, gold, fixed deposits, and more.
+
+Holdings are **derived from transactions**, not stored manually — the same way real financial systems work.
+Buy 10 TCS, sell 2 TCS → current holding is automatically 8 TCS.
 
 ---
 
 ## Features
 
 ### Currently Working
-- Add, edit, and delete stock holdings manually
-- Portfolio dashboard
+- User registration, login, and logout
+- Custom user model (extensible for future fields)
 
 ### In Progress
-- Live market data via yfinance
-- Portfolio performance charts (Chart.js)
+- Portfolio, Asset, and Transaction models
+- Derived holdings logic (quantity calculated from transactions)
+- Portfolio dashboard
+
+### Planned
+- Live market data via yfinance (NSE/BSE supported)
+- Profit/loss and average buy price per holding
+- Interactive charts with Chart.js
+- Portfolio Health Score (custom algorithm)
+- CAGR & XIRR calculations
+- Goal-based investment planner
 - REST API with Django REST Framework
-- JWT-based API authentication
-- Portfolio health score (custom algorithm)
-- Investment goal planner
+- Portfolio export (PDF / Excel)
+- Deployment on Railway / Render
 
 ---
 
 ## Tech Stack
 
 - **Backend:** Python, Django
-- **Database:** SQLite (development)
-- **Frontend:** HTML, CSS (Django templates)
+- **Database:** SQLite (development) → PostgreSQL (production)
+- **Frontend:** HTML5, Bootstrap 5, JavaScript
 
 ---
 
 ## Getting Started
 
 ```bash
-# Clone the repo
 git clone https://github.com/rishabhdeepak/investment-portfolio-tracker.git
 cd investment-portfolio-tracker
 
-# Create and activate a virtual environment
 python -m venv venv
-venv\Scripts\activate  # Windows
+venv\Scripts\activate        # Windows
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Run migrations
 python manage.py migrate
-
-# Start the development server
 python manage.py runserver
 ```
 
-Then open `http://127.0.0.1:8000` in your browser.
+Open `http://127.0.0.1:8000` in your browser.
 
 ---
 
@@ -59,12 +70,17 @@ Then open `http://127.0.0.1:8000` in your browser.
 
 ```
 investment-portfolio-tracker/
-├── accounts/       # User authentication
-├── config/         # Project settings and URLs
-├── dashboard/      # Portfolio dashboard views
-├── portfolio/      # Core portfolio and holdings logic
-├── templates/      # HTML templates
-└── manage.py
+│
+├── accounts/           # User model, registration, login, logout
+├── portfolio/          # Portfolio, Asset, Transaction models + holdings logic
+├── dashboard/          # Main dashboard views and templates
+├── config/             # Django settings and root URLs
+│
+├── templates/          # HTML templates (organized by app)
+├── static/             # CSS, JS, images
+│
+├── manage.py
+└── requirements.txt
 ```
 
 ---
@@ -72,18 +88,21 @@ investment-portfolio-tracker/
 ## Roadmap
 
 - [x] Project setup and app structure
-- [x] User authentication
-- [ ] Manual stock holding entry
-- [ ] Live price data with yfinance
-- [ ] Portfolio charts with Chart.js
-- [ ] REST API with Django REST Framework
-- [ ] JWT authentication for API
-- [ ] Portfolio health score
-- [ ] Goal planner
-- [ ] Deployment (Railway / Render)
+- [x] Custom user model with registration and login
+- [ ] Portfolio, Asset, and Transaction models
+- [ ] Derived holdings logic
+- [ ] Dashboard with holdings summary
+- [ ] Live market data with yfinance
+- [ ] Profit/loss calculations
+- [ ] Chart.js visualizations
+- [ ] Portfolio Health Score
+- [ ] Django REST Framework API
+- [ ] Deployment
 
 ---
 
 ## Author
 
-**Rishabh Deepak** — [github.com/rishabhdeepak](https://github.com/rishabhdeepak)
+**Rishabh Deepak**
+B.Tech CSE, IIIT Kottayam
+[github.com/rishabhdeepak](https://github.com/rishabhdeepak)
