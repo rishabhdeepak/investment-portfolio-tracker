@@ -89,7 +89,7 @@ investment-portfolio-tracker/
 
 - [x] Project setup and app structure
 - [x] Custom user model with registration and login
-- [ ] Portfolio, Asset, and Transaction models
+- [x] Portfolio, Asset, and Transaction models
 - [ ] Derived holdings logic
 - [ ] Dashboard with holdings summary
 - [ ] Live market data with yfinance
