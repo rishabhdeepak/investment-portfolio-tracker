@@ -115,16 +115,44 @@ class Transaction(models.Model):
 
     def clean(self):
         if self.quantity <= 0:
-            raise ValidationError("Quantity must be greater than zero.")
+            raise ValidationError({
+                'quantity': (
+                    "Quantity must be greater than zero."
+                )
+            })
         if self.price < 0:
-            raise ValidationError("Price cannot be negative.")
+            raise ValidationError({
+                'price': (
+                    "Price cannot be negative."
+                )
+            })
+        if self.fees < 0:
+            raise ValidationError({
+                'fees': (
+                    "Fees cannot be negative."
+                )
+            })
+        if self.taxes < 0:
+            raise ValidationError({
+                'taxes': (
+                    "Taxes cannot be negative."
+                )
+            })
         if self.transaction_type == 'SELL':
             holdings = self.portfolio.get_holdings()
             asset_id = self.asset_id
             if asset_id not in holdings:
-                raise ValidationError("Cannot sell an asset that is not held.")
+                raise ValidationError({
+                    'asset': (
+                        "Cannot sell an asset that is not held."
+                    )
+                })
             if self.quantity > holdings[asset_id]['quantity']:
-                raise ValidationError("Cannot sell more than the quantity held.")
+                raise ValidationError({
+                    'quantity': (
+                        "Cannot sell more than the quantity held."
+                    )
+                })
 
     def save(self, *args, **kwargs):
         self.full_clean()
