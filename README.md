@@ -3,7 +3,7 @@
 A Django web application for tracking personal investments across stocks, mutual funds, ETFs, and more.
 Users can manage multiple portfolios, log transactions, and monitor their holdings from a single dashboard.
 
-> 🚧 **Active Development** — Authentication is working. Portfolio models and dashboard are in progress.
+> 🚧 **Active Development** — Profile dashboard in progress.
 
 ---
 
@@ -21,10 +21,10 @@ Buy 10 TCS, sell 2 TCS → current holding is automatically 8 TCS.
 ### Currently Working
 - User registration, login, and logout
 - Custom user model (extensible for future fields)
-
-### In Progress
 - Portfolio, Asset, and Transaction models
 - Derived holdings logic (quantity calculated from transactions)
+
+### In Progress
 - Portfolio dashboard
 
 ### Planned
@@ -90,7 +90,7 @@ investment-portfolio-tracker/
 - [x] Project setup and app structure
 - [x] Custom user model with registration and login
 - [x] Portfolio, Asset, and Transaction models
-- [ ] Derived holdings logic
+- [x] Derived holdings logic
 - [ ] Dashboard with holdings summary
 - [ ] Live market data with yfinance
 - [ ] Profit/loss calculations
@@ -103,6 +103,6 @@ investment-portfolio-tracker/
 
 ## Author
 
-**Rishabh Deepak**
+**Rishabh D**
 B.Tech CSE, IIIT Kottayam
 [github.com/rishabhdeepak](https://github.com/rishabhdeepak)
