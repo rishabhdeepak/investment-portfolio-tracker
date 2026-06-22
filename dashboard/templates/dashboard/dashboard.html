@@ -2,4 +2,11 @@
 
 {% block content %}
 <h1>Dashboard</h1>
+{% for portfolio in portfolios %}
+	<a href="{% url 'portfolio' portfolio.id %}"><h3>{{portfolio.name}}</h3></a>
+	<br>
+	{% empty %}
+		<p>You don't have any portfolios yet!</p>
+
+{% endfor %}
 {% endblock content %}

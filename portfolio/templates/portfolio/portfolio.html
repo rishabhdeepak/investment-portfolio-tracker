@@ -2,4 +2,42 @@
 
 {% block content %}
 <h1>Portfolio</h1>
+<h1>{{ portfolio.name }}</h1>
+
+<p>
+    Base Currency:
+    {{ portfolio.base_currency }}
+</p>
+
+<p>
+    Created:
+    {{ portfolio.created_at }}
+</p>
+
+<h2>Holdings</h2>
+
+{% for asset_id, data in holdings.items %}
+	<div>
+		<p>
+			Asset Name: {{ data.asset.name }}
+		</p>
+
+		<p>
+			Quantity: {{ data.quantity }}
+		</p>
+
+		<p>
+			Average Buy Price: {{ data.avg_buy_price }}
+		</p>
+
+		<p>
+			Total Cost: {{ data.total_cost }}
+		</p>
+
+		<br>
+	</div>
+
+	{% empty %}
+			<p>No holdings found for this portfolio.</p>
+{% endfor %}
 {% endblock content %}
