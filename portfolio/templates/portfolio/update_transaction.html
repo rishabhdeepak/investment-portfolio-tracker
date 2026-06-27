@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Update Transaction</h1>
+
+<h3>{{ portfolio.name }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Update Transaction
+    </button>
+</form>
+
+{% endblock content %}

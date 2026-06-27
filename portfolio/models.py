@@ -22,10 +22,12 @@ class Portfolio(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def get_holdings(self):
+    def get_holdings(self, exclude_transaction_id=None):
         holdings = {}
         transactions = (self.transactions.select_related('asset').
                         order_by('transaction_date', 'id'))
+        if exclude_transaction_id:
+            transactions = transactions.exclude(id=exclude_transaction_id)
         for txn in transactions:
             asset_id = txn.asset_id
             if asset_id not in holdings:
@@ -139,7 +141,8 @@ class Transaction(models.Model):
                 )
             })
         if self.transaction_type == 'SELL':
-            holdings = self.portfolio.get_holdings()
+            holdings = self.portfolio.get_holdings(
+                exclude_transaction_id= self.id if self.pk else None)
             asset_id = self.asset_id
             if asset_id not in holdings:
                 raise ValidationError({

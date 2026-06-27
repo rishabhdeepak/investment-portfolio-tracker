@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Portfolio</h1>
+
 <h1>{{ portfolio.name }}</h1>
 
 <p>
@@ -13,6 +13,14 @@
     Created:
     {{ portfolio.created_at }}
 </p>
+<p>
+	<a href="{% url 'update_portfolio' portfolio.id %}">Edit Portfolio</a>
+</p>
+<p>
+	<a href="{% url 'delete_portfolio' portfolio.id %}">Delete Portfolio</a>
+</p>
+
+<h2><a href="{% url 'create_transaction' portfolio.id %}">New Transaction</a></h2>
 
 <h2>Holdings</h2>
 
@@ -40,4 +48,45 @@
 	{% empty %}
 			<p>No holdings found for this portfolio.</p>
 {% endfor %}
+
+<h2>Transaction History</h2>
+
+{% for transaction in transactions %}
+
+<div>
+	<p>
+		<strong>{{transaction.transaction_type}}</strong>
+		-
+		{{transaction.asset.name}}
+	</p>
+	<p>
+		Quantity: {{transaction.quantity}}
+	</p>
+	<p>
+		Price: {{transaction.price}}
+	</p>
+	<p>
+		Fees: {{transaction.fees}}
+	</p>
+	<p>
+		Taxes: {{transaction.taxes}}
+	</p>
+	<p>
+		Date: {{transaction.transaction_date}}
+	</p>
+	<a href="{% url 'update_transaction' portfolio.id transaction.id %}">
+		Edit Transaction
+	</a><br>
+	<a href="{% url 'delete_transaction' portfolio.id transaction.id %}">
+		Delete Transaction
+	</a>
+</div>
+<hr>
+
+{% empty %}
+
+	<p>No transactions found for this portfolio.</p>
+
+{% endfor %}
+
 {% endblock content %}
