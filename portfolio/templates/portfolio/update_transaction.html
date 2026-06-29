@@ -6,6 +6,12 @@
 
 <h3>{{ portfolio.name }}</h3>
 
+<p>
+    Asset:
+    {{ transaction.asset.name }}
+    ({{ transaction.asset.symbol }})
+</p>
+
 <form method="POST">
     {% csrf_token %}
 

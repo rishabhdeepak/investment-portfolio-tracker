@@ -4,6 +4,7 @@ from .forms import PortfolioForm, TransactionForm
 from .services import search_assets
 from django.http import JsonResponse
 from .models import Asset
+from decimal import Decimal
 
 @login_required(login_url='login')
 def portfolio(request, portfolio_id):
@@ -11,8 +12,20 @@ def portfolio(request, portfolio_id):
 	holdings = portfolio.get_holdings()
 	transactions = (portfolio.transactions.select_related('asset')
 				 .order_by('-transaction_date', '-id'))
+	
+	total_invested = Decimal('0')
+	total_value = Decimal('0')
+	total_profit_loss = Decimal('0')
+	for data in holdings.values():
+		total_invested += data['total_cost']
+		if data['current_value'] is not None:
+			total_value += data['current_value']
+		if data['profit_loss'] is not None:
+			total_profit_loss += data['profit_loss']
+
 	context = {'portfolio': portfolio,'holdings': holdings,
-			   'transactions': transactions}
+			   'transactions': transactions,'total_invested': total_invested,
+			   'total_value': total_value,'total_profit_loss': total_profit_loss}
 	return render(request, 'portfolio/portfolio.html', context)
 
 @login_required(login_url='login')
@@ -64,7 +77,7 @@ def create_transaction(request, portfolio_id):
 		
 	else:
 		form = TransactionForm()
-		
+
 	context = {'form': form, 'portfolio': portfolio}
 	return render(request, 'portfolio/create_transaction.html', context)
 

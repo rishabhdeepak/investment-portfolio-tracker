@@ -4,6 +4,28 @@
 
 <h1>{{ portfolio.name }}</h1>
 
+<h2>Portfolio Summary</h2>
+
+<p>
+    Total Invested:
+    {{ total_invested|floatformat:2 }}
+</p>
+
+<p>
+    Current Value:
+    {{ total_value|floatformat:2 }}
+</p>
+
+<p>
+    Profit/Loss:
+    {{ total_profit_loss|floatformat:2 }}
+</p>
+
+<p>
+    Holdings:
+    {{ holdings|length }}
+</p>
+
 <p>
     Base Currency:
     {{ portfolio.base_currency }}
@@ -41,6 +63,22 @@
 		<p>
 			Total Cost: {{ data.total_cost }}
 		</p>
+<p>
+    Current Price: {{ data.current_price|floatformat:2 }}
+</p>
+
+<p>
+    Current Value: {{ data.current_value|floatformat:2 }}
+</p>
+
+<p>
+    Profit/Loss:
+    {% if data.profit_loss >= 0 %}
+        +{{ data.profit_loss|floatformat:2 }}
+    {% else %}
+        {{ data.profit_loss|floatformat:2 }}
+    {% endif %}
+</p>
 
 		<br>
 	</div>

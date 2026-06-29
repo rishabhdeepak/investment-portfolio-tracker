@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from .services import get_current_price
 
 class Portfolio(models.Model):
 
@@ -54,6 +55,24 @@ class Portfolio(models.Model):
 
         for data in holdings.values():
             data['avg_buy_price'] = (data['total_cost'] / data['quantity'])
+
+            try:
+                current_price = get_current_price(data['asset'].symbol)
+            except Exception:
+                current_price = None
+            data['current_price'] = current_price
+
+            if current_price is not None:
+                data['current_value'] = (Decimal(str(current_price))
+                                          * data['quantity'])
+            else:
+                data['current_value'] = None
+
+            if current_price:
+                data['profit_loss'] = (data['current_value'] - data['total_cost'])
+            else:   
+                data['profit_loss'] = None
+                
         return holdings
 
     def __str__(self):
