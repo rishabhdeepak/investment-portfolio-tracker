@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import PortfolioForm, TransactionForm
+from .services import search_assets
+from django.http import JsonResponse
+from .models import Asset
 
 @login_required(login_url='login')
 def portfolio(request, portfolio_id):
@@ -29,16 +32,39 @@ def create_portfolio(request):
 @login_required(login_url='login')
 def create_transaction(request, portfolio_id):
 	portfolio = get_object_or_404(request.user.portfolios, id=portfolio_id)
+
 	if request.method == 'POST':
 		form = TransactionForm(request.POST)
+
+		symbol = request.POST.get('symbol')
+		asset_name = request.POST.get('asset_name')
+		quote_type = request.POST.get('quote_type')
+
+		asset_type_map = {
+			"EQUITY": "STOCK",
+			"ETF": "ETF",
+			"CRYPTOCURRENCY": "CRYPTO",
+			}
+		
+		asset, created = Asset.objects.get_or_create(
+			symbol=symbol,
+			defaults={'name': asset_name,
+			'asset_type': asset_type_map.get(quote_type, 'STOCK')
+					 }
+		)
+
 		form.instance.portfolio = portfolio
+		form.instance.asset = asset
+
 		if form.is_valid():
 			transaction = form.save(commit=False)
 			transaction.portfolio = portfolio
 			transaction.save()
 			return redirect('portfolio', portfolio_id=portfolio.id)
+		
 	else:
 		form = TransactionForm()
+		
 	context = {'form': form, 'portfolio': portfolio}
 	return render(request, 'portfolio/create_transaction.html', context)
 
@@ -87,3 +113,11 @@ def delete_portfolio(request, portfolio_id):
 		return redirect('home')
 	context = {'obj': portfolio}
 	return render(request, 'portfolio/delete.html', context)
+
+@login_required(login_url='login')
+def search_assets_view(request):
+	query = request.GET.get('q', '')
+	if not query:
+		return JsonResponse([], safe=False)
+	results = search_assets(query)
+	return JsonResponse(results, safe=False)

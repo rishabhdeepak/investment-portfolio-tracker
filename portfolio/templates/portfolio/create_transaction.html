@@ -6,13 +6,118 @@
 
 <h3>{{ portfolio.name }}</h3>
 
+<h3>Search Assets</h3>
+
+<input type="text" id="asset-search" placeholder="Search stocks, ETFs, crypto...">
+
+<div id="search-results"></div>
+
 <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
+{% csrf_token %}
+<input type="hidden" id="selected-symbol" name="symbol">
+<input type="hidden" id="selected-name" name="asset_name">
+<input type="hidden" id="selected-type" name="quote_type">
+
+{{ form.transaction_type.label_tag }}
+{{ form.transaction_type }}
+
+{{ form.quantity.label_tag }}
+{{ form.quantity }}
+
+{{ form.price.label_tag }}
+{{ form.price }}
+
+{{ form.fees.label_tag }}
+{{ form.fees }}
+
+{{ form.taxes.label_tag }}
+{{ form.taxes }}
+
+{{ form.transaction_date.label_tag }}
+{{ form.transaction_date }}
+
+{{ form.notes.label_tag }}
+{{ form.notes }}
 
     <button type="submit">
         Save Transaction
     </button>
 </form>
+<script>
+
+const searchBox = document.getElementById('asset-search');
+const resultsDiv = document.getElementById('search-results');
+
+console.log("Script loaded");
+
+searchBox.addEventListener('input', async () => {
+
+    const query = searchBox.value;
+
+    console.log("Query:", query);
+
+    if (query.length < 2) {
+        resultsDiv.innerHTML = '';
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `/portfolio/search-assets/?q=${query}`
+        );
+
+        console.log("Response status:", response.status);
+
+        const results = await response.json();
+
+        console.log("Results:", results);
+
+        resultsDiv.innerHTML = '';
+
+        results.forEach(asset => {
+
+            const div = document.createElement('div');
+
+            div.innerText =
+                `${asset.name} (${asset.symbol})`;
+
+            div.style.cursor = 'pointer';
+
+div.addEventListener('click', () => {
+
+    console.log(asset);
+
+    document.getElementById('selected-symbol').value =
+        asset.symbol;
+
+    document.getElementById('selected-name').value =
+        asset.name;
+
+    document.getElementById('selected-type').value =
+        asset.quote_type;
+
+    searchBox.value =
+        `${asset.name} (${asset.symbol})`;
+
+    resultsDiv.innerHTML = '';
+
+});
+
+resultsDiv.appendChild(div);
+
+        });
+
+    }
+
+    catch(error) {
+
+        console.error("Fetch Error:", error);
+
+    }
+
+});
+
+</script>
 
 {% endblock content %}
