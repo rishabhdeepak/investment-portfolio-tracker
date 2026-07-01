@@ -52,6 +52,9 @@ def create_transaction(request, portfolio_id):
 		symbol = request.POST.get('symbol')
 		asset_name = request.POST.get('asset_name')
 		quote_type = request.POST.get('quote_type')
+		exchange = request.POST.get('exchange')
+		sector = request.POST.get('sector')
+		industry = request.POST.get('industry')
 
 		asset_type_map = {
 			"EQUITY": "STOCK",
@@ -61,10 +64,12 @@ def create_transaction(request, portfolio_id):
 		
 		asset, created = Asset.objects.get_or_create(
 			symbol=symbol,
-			defaults={'name': asset_name,
-			'asset_type': asset_type_map.get(quote_type, 'STOCK')
-					 }
-		)
+			defaults= {'name': asset_name,
+			'asset_type': asset_type_map.get(quote_type, 'STOCK'),
+			'exchange' : exchange or '',
+			'sector' : sector or '',
+			'industry': industry or ''
+					 })
 
 		form.instance.portfolio = portfolio
 		form.instance.asset = asset
@@ -134,3 +139,21 @@ def search_assets_view(request):
 		return JsonResponse([], safe=False)
 	results = search_assets(query)
 	return JsonResponse(results, safe=False)
+
+@login_required(login_url='login')
+def asset_detail(request, portfolio_id, asset_id):
+	portfolio = get_object_or_404(request.user.portfolios, id=portfolio_id)
+	holdings = portfolio.get_holdings()
+	asset = get_object_or_404(Asset.objects.filter(
+		transactions__portfolio=portfolio).distinct(), id=asset_id)
+	holding = holdings.get(asset.id)
+	transactions = (portfolio.transactions.filter(asset=asset)
+				 .order_by('-transaction_date', '-id'))
+
+	context = {
+		'portfolio': portfolio,
+		'asset': asset,
+		'transactions': transactions,
+		'holding': holding
+	}
+	return render(request, 'portfolio/asset_details.html', context)

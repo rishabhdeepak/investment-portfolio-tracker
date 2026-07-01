@@ -14,5 +14,7 @@ def search_assets(query):
             'symbol': item.get('symbol'),
             'name': item.get('longname') or item.get('shortname'),
             'quote_type': item.get('quoteType'),
-            'exchange': item.get('exchDisp'),})
+            'exchange': item.get('exchDisp'),
+            'sector': item.get('sector'),
+            'industry': item.get('industryDisp')})
     return results[:10]

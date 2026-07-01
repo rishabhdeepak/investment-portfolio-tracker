@@ -99,6 +99,8 @@ class Asset(models.Model):
 
     sector = models.CharField(max_length=100, blank=True)
 
+    industry = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
         return f"{self.symbol} - {self.name}"
 

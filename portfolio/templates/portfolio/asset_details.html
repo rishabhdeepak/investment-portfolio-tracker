@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ asset.name }}</h1>
+
+<p>
+    Symbol: {{ asset.symbol }}
+</p>
+
+<p>
+    Asset Type: {{ asset.asset_type }}
+</p>
+
+<p>
+    Exchange: {{ asset.exchange }}
+</p>
+
+<p>
+    Sector: {{ asset.sector }}
+</p>
+
+<p>
+    Industry: {{ asset.industry }}
+</p>
+
+{% if holding %}
+
+<p>
+    Quantity Held: {{ holding.quantity }}
+</p>
+
+<p>
+    Average Buy Price:
+    {{ holding.avg_buy_price|floatformat:2 }}
+</p>
+
+<p>
+    Current Price:
+    {{ holding.current_price|floatformat:2 }}
+</p>
+
+<p>
+    Current Value:
+    {{ holding.current_value|floatformat:2 }}
+</p>
+
+<p>
+    Profit/Loss:
+    {{ holding.profit_loss|floatformat:2 }}
+</p>
+
+{% endif %}
+
+<h2>Transactions</h2>
+
+{% for transaction in transactions %}
+
+<div>
+
+    <p>
+        {{ transaction.transaction_type }}
+    </p>
+
+    <p>
+        Quantity: {{ transaction.quantity }}
+    </p>
+
+    <p>
+        Price: {{ transaction.price }}
+    </p>
+
+    <p>
+        Date: {{ transaction.transaction_date }}
+    </p>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No transactions found.</p>
+
+{% endfor %}
+
+{% endblock content %}

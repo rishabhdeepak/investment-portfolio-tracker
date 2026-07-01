@@ -17,6 +17,9 @@
 <input type="hidden" id="selected-symbol" name="symbol">
 <input type="hidden" id="selected-name" name="asset_name">
 <input type="hidden" id="selected-type" name="quote_type">
+<input type="hidden" id="selected-exchange" name="exchange">
+<input type="hidden" id="selected-sector" name="sector">
+<input type="hidden" id="selected-industry" name="industry">
 
 {{ form.transaction_type.label_tag }}
 {{ form.transaction_type }}
@@ -96,6 +99,15 @@ div.addEventListener('click', () => {
 
     document.getElementById('selected-type').value =
         asset.quote_type;
+
+    document.getElementById('selected-exchange').value =
+        asset.exchange || '';
+
+    document.getElementById('selected-sector').value =
+        asset.sector || '';
+
+    document.getElementById('selected-industry').value =
+        asset.industry || '';
 
     searchBox.value =
         `${asset.name} (${asset.symbol})`;

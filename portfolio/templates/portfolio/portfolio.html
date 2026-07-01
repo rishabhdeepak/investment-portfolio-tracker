@@ -49,7 +49,9 @@
 {% for asset_id, data in holdings.items %}
 	<div>
 		<p>
-			Asset Name: {{ data.asset.name }}
+			Asset Name: 
+			<a href="{% url 'asset_detail' portfolio.id data.asset.id %}">
+    	{{ data.asset.name }}</a>
 		</p>
 
 		<p>
