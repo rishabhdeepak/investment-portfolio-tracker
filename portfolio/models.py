@@ -74,7 +74,60 @@ class Portfolio(models.Model):
                 data['profit_loss'] = None
                 
         return holdings
+    
+    def get_portfolio_summary(self):
+        holdings = self.get_holdings()
+        total_invested = Decimal('0')
+        total_value = Decimal('0')
+        total_profit_loss = Decimal('0')
+        sector_allocation = {}
 
+        for data in holdings.values():
+            total_invested += data['total_cost']
+            if data['current_value'] is not None:
+                total_value += data['current_value']
+            if data['profit_loss'] is not None:
+                total_profit_loss += data['profit_loss']
+
+            sector = data['asset'].sector or 'Unknown'
+            if sector not in sector_allocation:
+                sector_allocation[sector] = Decimal('0')
+            if data['current_value'] is not None:
+                sector_allocation[sector] += data['current_value']
+
+        if total_invested > 0:
+            portfolio_return_percentage = ((total_profit_loss/total_invested)*
+                                           Decimal(100))
+        else:
+            portfolio_return_percentage = Decimal('0')
+
+        if total_value > 0:
+            for data in holdings.values():
+                if data['current_value'] is not None:
+                    data['allocation_percentage'] = (
+                        (data['current_value'] / total_value) * Decimal('100')
+                    )
+                else:
+                    data['allocation_percentage'] = Decimal('0')
+            for sector in sector_allocation:
+                sector_allocation[sector] = ((sector_allocation[sector]
+                                            /total_value)*Decimal(100))
+        
+        else:
+            for data in holdings.values():
+                data['allocation_percentage'] = Decimal('0')
+            for sector in sector_allocation:
+                sector_allocation[sector] = Decimal('0')
+
+        return {
+            'holdings': holdings,
+            'total_invested': total_invested,
+            'total_value': total_value,
+            'total_profit_loss': total_profit_loss,
+            'portfolio_return_percentage' : portfolio_return_percentage,
+            'sector_allocation' : sector_allocation
+        }
+    
     def __str__(self):
         return self.name
 

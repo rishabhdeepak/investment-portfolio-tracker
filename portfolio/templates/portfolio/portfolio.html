@@ -22,6 +22,11 @@
 </p>
 
 <p>
+    Portfolio Return:
+    {{ portfolio_return_percentage|floatformat:2 }}%
+</p>
+
+<p>
     Holdings:
     {{ holdings|length }}
 </p>
@@ -43,6 +48,15 @@
 </p>
 
 <h2><a href="{% url 'create_transaction' portfolio.id %}">New Transaction</a></h2>
+
+<h2>Sector Allocation</h2>
+
+{% for sector, percentage in sector_allocation.items %}
+    <p>
+        {{ sector }}:
+        {{ percentage|floatformat:2 }}%
+    </p>
+{% endfor %}
 
 <h2>Holdings</h2>
 

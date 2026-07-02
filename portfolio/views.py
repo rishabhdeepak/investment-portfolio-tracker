@@ -4,28 +4,25 @@ from .forms import PortfolioForm, TransactionForm
 from .services import search_assets
 from django.http import JsonResponse
 from .models import Asset
-from decimal import Decimal
 
 @login_required(login_url='login')
 def portfolio(request, portfolio_id):
 	portfolio = get_object_or_404(request.user.portfolios, id=portfolio_id)
-	holdings = portfolio.get_holdings()
+
+	summary = portfolio.get_portfolio_summary()
+
 	transactions = (portfolio.transactions.select_related('asset')
 				 .order_by('-transaction_date', '-id'))
 	
-	total_invested = Decimal('0')
-	total_value = Decimal('0')
-	total_profit_loss = Decimal('0')
-	for data in holdings.values():
-		total_invested += data['total_cost']
-		if data['current_value'] is not None:
-			total_value += data['current_value']
-		if data['profit_loss'] is not None:
-			total_profit_loss += data['profit_loss']
-
-	context = {'portfolio': portfolio,'holdings': holdings,
-			   'transactions': transactions,'total_invested': total_invested,
-			   'total_value': total_value,'total_profit_loss': total_profit_loss}
+	context = {'portfolio': portfolio,
+			   'holdings': summary['holdings'],
+			   'transactions': transactions,
+			   'total_invested': summary['total_invested'],
+			   'total_value': summary['total_value'],
+			   'total_profit_loss': summary['total_profit_loss'],
+			   'portfolio_return_percentage': summary['portfolio_return_percentage'],
+			   'sector_allocation' : summary['sector_allocation']
+			   }
 	return render(request, 'portfolio/portfolio.html', context)
 
 @login_required(login_url='login')
@@ -143,7 +140,8 @@ def search_assets_view(request):
 @login_required(login_url='login')
 def asset_detail(request, portfolio_id, asset_id):
 	portfolio = get_object_or_404(request.user.portfolios, id=portfolio_id)
-	holdings = portfolio.get_holdings()
+	summary = portfolio.get_portfolio_summary()
+	holdings = summary['holdings']
 	asset = get_object_or_404(Asset.objects.filter(
 		transactions__portfolio=portfolio).distinct(), id=asset_id)
 	holding = holdings.get(asset.id)
