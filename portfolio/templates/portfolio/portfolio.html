@@ -40,14 +40,6 @@
     Created:
     {{ portfolio.created_at }}
 </p>
-<p>
-	<a href="{% url 'update_portfolio' portfolio.id %}">Edit Portfolio</a>
-</p>
-<p>
-	<a href="{% url 'delete_portfolio' portfolio.id %}">Delete Portfolio</a>
-</p>
-
-<h2><a href="{% url 'create_transaction' portfolio.id %}">New Transaction</a></h2>
 
 <h2>Sector Allocation</h2>
 
@@ -57,6 +49,67 @@
         {{ percentage|floatformat:2 }}%
     </p>
 {% endfor %}
+
+<h2>Top Holdings</h2>
+
+{% if top_holdings %}
+
+    <ol>
+
+    {% for holding in top_holdings|slice:":5" %}
+
+        <li>
+            {{ holding.asset.name }}
+            ({{ holding.asset.symbol }})
+            -
+            {{ holding.allocation_percentage|floatformat:2 }}%
+        </li>
+
+    {% endfor %}
+
+    </ol>
+
+{% else %}
+
+    <p>No holdings available.</p>
+
+{% endif %}
+
+<p>
+	<a href="{% url 'update_portfolio' portfolio.id %}">Edit Portfolio</a>
+</p>
+<p>
+	<a href="{% url 'delete_portfolio' portfolio.id %}">Delete Portfolio</a>
+</p>
+
+<h2><a href="{% url 'create_transaction' portfolio.id %}">New Transaction</a></h2>
+
+<h2>Best Performer</h2>
+
+{% if best_performer %}
+    <p>
+        {{ best_performer.asset.name }}
+        ({{ best_performer.asset.symbol }})
+        -
+        {{ best_performer.return_percentage|floatformat:2 }}%
+    </p>
+{% else %}
+    <p>No performance data available.</p>
+{% endif %}
+
+
+<h2>Worst Performer</h2>
+
+{% if worst_performer %}
+    <p>
+        {{ worst_performer.asset.name }}
+        ({{ worst_performer.asset.symbol }})
+        -
+        {{ worst_performer.return_percentage|floatformat:2 }}%
+    </p>
+{% else %}
+    <p>No performance data available.</p>
+{% endif %}
 
 <h2>Holdings</h2>
 

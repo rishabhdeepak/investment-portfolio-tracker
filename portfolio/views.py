@@ -21,7 +21,10 @@ def portfolio(request, portfolio_id):
 			   'total_value': summary['total_value'],
 			   'total_profit_loss': summary['total_profit_loss'],
 			   'portfolio_return_percentage': summary['portfolio_return_percentage'],
-			   'sector_allocation' : summary['sector_allocation']
+			   'sector_allocation' : summary['sector_allocation'],
+			   'top_holdings' : summary['top_holdings'],
+			   'best_performer' : summary['best_performer'],
+			   'worst_performer' : summary['worst_performer']
 			   }
 	return render(request, 'portfolio/portfolio.html', context)
 

@@ -119,13 +119,36 @@ class Portfolio(models.Model):
             for sector in sector_allocation:
                 sector_allocation[sector] = Decimal('0')
 
+        top_holdings = sorted(holdings.values(),
+                              key=lambda holding: holding['allocation_percentage'],
+                              reverse=True)
+        
+        for holding in holdings.values():
+            if holding['total_cost'] > 0 and holding['profit_loss'] is not None:
+                holding['return_percentage'] = ((holding['profit_loss']
+                                        /holding['total_cost'])*Decimal(100))
+            else:
+                holding['return_percentage'] =  Decimal('0')
+        
+        if holdings:
+            best_performer = max(holdings.values(),
+                            key= lambda holding: holding['return_percentage'])
+            worst_performer = min(holdings.values(),
+                            key= lambda holding: holding['return_percentage'])
+        else:
+            best_performer = None
+            worst_performer = None
+               
         return {
             'holdings': holdings,
             'total_invested': total_invested,
             'total_value': total_value,
             'total_profit_loss': total_profit_loss,
             'portfolio_return_percentage' : portfolio_return_percentage,
-            'sector_allocation' : sector_allocation
+            'sector_allocation' : sector_allocation,
+            'top_holdings' : top_holdings,
+            'best_performer' : best_performer,
+            'worst_performer' : worst_performer
         }
     
     def __str__(self):
