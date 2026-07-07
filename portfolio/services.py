@@ -1,8 +1,20 @@
 import yfinance as yf
+from django.core.cache import cache
 
 def get_current_price(ticker):
+
+    cache_key = f'current_price:{ticker}'
+    cached_price = cache.get(cache_key)
+
+    if cached_price is not None:
+        return cached_price
+
     ticker_obj = yf.Ticker(ticker)
-    return ticker_obj.fast_info['lastPrice']
+    current_price = ticker_obj.fast_info['lastPrice']
+
+    cache.set(cache_key, current_price, timeout=300)
+
+    return current_price
 
 def search_assets(query):
     search = yf.Search(query)
