@@ -133,3 +133,14 @@ CACHES = {
         }
     }
 }
+
+MARKET_PRICE_CACHE_TIMEOUT = 300
+
+#CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_BEAT_SCHEDULE = {
+	'refresh-market-prices': {
+        'task': 'portfolio.tasks.refresh_market_prices',
+        'schedule': 240.0,
+    },
+}
