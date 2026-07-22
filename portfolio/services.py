@@ -17,8 +17,12 @@ def get_current_price(ticker):
     return current_price
 
 def fetch_current_price(ticker):
-    ticker_obj = yf.Ticker(ticker)
-    return ticker_obj.fast_info['lastPrice']
+    try:
+        ticker_obj = yf.Ticker(ticker)
+        return ticker_obj.fast_info['lastPrice']
+    except Exception as e:
+        print(f"Failed to fetch {ticker}: {e}")
+        return None
 
 def search_assets(query):
     search = yf.Search(query)

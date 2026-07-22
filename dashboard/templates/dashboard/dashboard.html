@@ -1,12 +1,85 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1>Dashboard</h1>
+
+<h2>Overall Portfolio Summary</h2>
+
+<p>Total Invested: {{ total_invested|floatformat:2 }}</p>
+
+<p>Current Value: {{ total_value|floatformat:2 }}</p>
+
+<p>Profit/Loss: {{ total_profit_loss|floatformat:2 }}</p>
+
+<p>Return: {{ total_return_percentage|floatformat:2 }}%</p>
+
+<hr>
+
+<h2>Combined Stock Allocation</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Stock</th>
+            <th>Value</th>
+            <th>Allocation</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for symbol, data in combined_stock_allocation.items %}
+        <tr>
+            <td>{{ symbol }}</td>
+            <td>{{ data.value|floatformat:2 }}</td>
+            <td>{{ data.allocation_percentage|floatformat:2 }}%</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3">No holdings found.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Combined Sector Allocation</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Sector</th>
+            <th>Value</th>
+            <th>Allocation</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for sector, data in combined_sector_allocation.items %}
+        <tr>
+            <td>{{ sector }}</td>
+            <td>{{ data.value|floatformat:2 }}</td>
+            <td>{{ data.allocation_percentage|floatformat:2 }}%</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3">No sectors found.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>My Portfolios</h2>
+
 {% for portfolio in portfolios %}
-	<a href="{% url 'portfolio' portfolio.id %}"><h3>{{portfolio.name}}</h3></a>
-	<br>
-	{% empty %}
-		<p>You don't have any portfolios yet!</p>
+
+    <a href="{% url 'portfolio' portfolio.id %}">
+        <h3>{{ portfolio.name }}</h3>
+    </a>
+
+{% empty %}
+
+    <p>You don't have any portfolios yet!</p>
 
 {% endfor %}
+
 {% endblock content %}
