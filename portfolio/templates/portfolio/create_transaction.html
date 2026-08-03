@@ -46,87 +46,85 @@
         Save Transaction
     </button>
 </form>
+
 <script>
 
 const searchBox = document.getElementById('asset-search');
 const resultsDiv = document.getElementById('search-results');
 
-console.log("Script loaded");
+let searchTimeout;
 
-searchBox.addEventListener('input', async () => {
+searchBox.addEventListener('input', () => {
 
-    const query = searchBox.value;
+    clearTimeout(searchTimeout);
 
-    console.log("Query:", query);
+    searchTimeout = setTimeout(async () => {
 
-    if (query.length < 2) {
-        resultsDiv.innerHTML = '';
-        return;
-    }
+        const query = searchBox.value.trim();
 
-    try {
+        if (query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
 
-        const response = await fetch(
-            `/portfolio/search-assets/?q=${query}`
-        );
+        try {
 
-        console.log("Response status:", response.status);
+            const response = await fetch(
+                `/portfolio/search-assets/?q=${encodeURIComponent(query)}`
+            );
 
-        const results = await response.json();
+            const results = await response.json();
 
-        console.log("Results:", results);
+            resultsDiv.innerHTML = '';
 
-        resultsDiv.innerHTML = '';
+            results.forEach(asset => {
 
-        results.forEach(asset => {
+                const div = document.createElement('div');
 
-            const div = document.createElement('div');
+                div.innerText = `${asset.name} (${asset.symbol})`;
 
-            div.innerText =
-                `${asset.name} (${asset.symbol})`;
+                div.style.cursor = 'pointer';
 
-            div.style.cursor = 'pointer';
+                div.addEventListener('click', () => {
 
-div.addEventListener('click', () => {
+                    document.getElementById('selected-symbol').value =
+                        asset.symbol;
 
-    console.log(asset);
+                    document.getElementById('selected-name').value =
+                        asset.name;
 
-    document.getElementById('selected-symbol').value =
-        asset.symbol;
+                    document.getElementById('selected-type').value =
+                        asset.quote_type;
 
-    document.getElementById('selected-name').value =
-        asset.name;
+                    document.getElementById('selected-exchange').value =
+                        asset.exchange || '';
 
-    document.getElementById('selected-type').value =
-        asset.quote_type;
+                    document.getElementById('selected-sector').value =
+                        asset.sector || '';
 
-    document.getElementById('selected-exchange').value =
-        asset.exchange || '';
+                    document.getElementById('selected-industry').value =
+                        asset.industry || '';
 
-    document.getElementById('selected-sector').value =
-        asset.sector || '';
+                    searchBox.value =
+                        `${asset.name} (${asset.symbol})`;
 
-    document.getElementById('selected-industry').value =
-        asset.industry || '';
+                    resultsDiv.innerHTML = '';
 
-    searchBox.value =
-        `${asset.name} (${asset.symbol})`;
+                });
 
-    resultsDiv.innerHTML = '';
+                resultsDiv.appendChild(div);
 
-});
+            });
 
-resultsDiv.appendChild(div);
+        }
 
-        });
+        catch(error) {
 
-    }
+            console.error("Fetch Error:", error);
 
-    catch(error) {
+        }
 
-        console.error("Fetch Error:", error);
-
-    }
+    }, 400);
 
 });
 

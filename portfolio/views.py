@@ -5,6 +5,9 @@ from .services.stocks import search_assets
 from .services.mutual_funds import search_mutual_funds
 from django.http import JsonResponse
 from .models import Asset
+from concurrent.futures import ThreadPoolExecutor
+from django.core.cache import cache
+from django.conf import settings
 
 @login_required(login_url='login')
 def portfolio(request, portfolio_id):
@@ -136,12 +139,40 @@ def delete_portfolio(request, portfolio_id):
 
 @login_required(login_url='login')
 def search_assets_view(request):
-	query = request.GET.get('q', '')
+	query = request.GET.get('q', '').strip().lower()
 	if not query:
 		return JsonResponse([], safe=False)
-	stock_results = search_assets(query)
-	mutual_funds_results = search_mutual_funds(query)
-	results = stock_results+mutual_funds_results
+
+	cache_key = f"search:{query}"
+	cached_results = cache.get(cache_key)
+
+	if cached_results is not None:
+		return JsonResponse(cached_results, safe=False)
+	
+	with ThreadPoolExecutor(max_workers=2) as executor:
+		stock_future = executor.submit(search_assets, query)
+		mutual_fund_future = executor.submit(search_mutual_funds, query)
+
+		try:
+			stock_results = stock_future.result()
+		except Exception:
+			stock_results = []
+
+		try:
+			mutual_fund_results = mutual_fund_future.result()
+		except Exception:
+			mutual_fund_results = []
+
+	results = stock_results+mutual_fund_results
+
+	results.sort(
+    key=lambda asset: (
+        not asset["name"].lower().startswith(query),
+        not asset["symbol"].lower().startswith(query),
+        asset["name"].lower()))
+
+	cache.set(cache_key, results, timeout=settings.SEARCH_CACHE_TIMEOUT,)
+
 	return JsonResponse(results, safe=False)
 
 @login_required(login_url='login')
