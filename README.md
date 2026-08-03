@@ -2,7 +2,7 @@
 
 WealthTrack is a full-stack Django application for tracking investment portfolios across multiple asset classes. Users can manage multiple portfolios, record transactions, monitor real-time portfolio performance, and analyze their investments through a unified dashboard.
 
-> 🚧 **Active Development** — Mutual Fund support is the next major milestone.
+> 🚧 **Active Development** — Search Optimization in progress
 
 ---
 
