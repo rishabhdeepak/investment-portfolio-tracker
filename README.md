@@ -49,10 +49,11 @@ The application is also designed from the ground up to support multiple asset cl
 - Celery & Celery Beat background tasks
 - Automatic market price updates using yfinance
 - Transaction validation
+- Mutual Fund support
 
 ### 🚧 In Progress
 
-- Mutual Fund support
+- Asset search optimization
 
 ### 📌 Planned
 
@@ -186,7 +187,7 @@ investment-portfolio-tracker/
 - [x] Dashboard Analytics
 - [x] Redis Caching
 - [x] Celery & Celery Beat Integration
-- [ ] Mutual Fund Support
+- [x] Mutual Fund Support
 - [ ] REST API (Django REST Framework)
 - [ ] Interactive Charts (Chart.js)
 - [ ] Portfolio Health Score
