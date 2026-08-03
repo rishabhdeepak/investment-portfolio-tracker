@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -135,6 +136,8 @@ CACHES = {
 }
 
 MARKET_PRICE_CACHE_TIMEOUT = 300
+MUTUAL_FUND_NAV_REFRESH_INTERVAL = 24 * 60 * 60   # 24 hours
+MUTUAL_FUND_NAV_CACHE_TIMEOUT = 30 * 60 * 60      # 30 hours (includes buffer)
 
 #CELERY SETTINGS
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
@@ -142,5 +145,9 @@ CELERY_BEAT_SCHEDULE = {
 	'refresh-market-prices': {
         'task': 'portfolio.tasks.refresh_market_prices',
         'schedule': 240.0,
+    },
+	'refresh-mutual-fund-navs': {
+        'task': 'portfolio.tasks.refresh_navs',
+        'schedule': crontab(hour=21, minute=0),
     },
 }

@@ -2,7 +2,8 @@ from django.db import models
 from django.conf import settings
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-from .services import get_current_price
+from .services.stocks import get_current_price
+from .services.mutual_funds import get_current_nav
 
 class Portfolio(models.Model):
 
@@ -57,7 +58,10 @@ class Portfolio(models.Model):
             data['avg_buy_price'] = (data['total_cost'] / data['quantity'])
 
             try:
-                current_price = get_current_price(data['asset'].symbol)
+                if data['asset'].asset_type == 'MUTUAL_FUND':
+                    current_price = get_current_nav(data['asset'].symbol)
+                else:
+                    current_price = get_current_price(data['asset'].symbol)
             except Exception:
                 current_price = None
             data['current_price'] = current_price
@@ -68,7 +72,7 @@ class Portfolio(models.Model):
             else:
                 data['current_value'] = None
 
-            if current_price:
+            if current_price is not None:
                 data['profit_loss'] = (data['current_value'] - data['total_cost'])
             else:   
                 data['profit_loss'] = None

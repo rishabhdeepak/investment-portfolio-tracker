@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import PortfolioForm, TransactionForm
-from .services import search_assets
+from .services.stocks import search_assets
+from .services.mutual_funds import search_mutual_funds
 from django.http import JsonResponse
 from .models import Asset
 
@@ -60,6 +61,7 @@ def create_transaction(request, portfolio_id):
 			"EQUITY": "STOCK",
 			"ETF": "ETF",
 			"CRYPTOCURRENCY": "CRYPTO",
+			"MUTUAL_FUND": "MUTUAL_FUND",
 			}
 		
 		asset, created = Asset.objects.get_or_create(
@@ -137,7 +139,9 @@ def search_assets_view(request):
 	query = request.GET.get('q', '')
 	if not query:
 		return JsonResponse([], safe=False)
-	results = search_assets(query)
+	stock_results = search_assets(query)
+	mutual_funds_results = search_mutual_funds(query)
+	results = stock_results+mutual_funds_results
 	return JsonResponse(results, safe=False)
 
 @login_required(login_url='login')
