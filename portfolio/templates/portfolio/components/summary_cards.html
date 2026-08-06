@@ -1,0 +1,36 @@
+<h2>Portfolio Summary</h2>
+
+<p>
+    Total Invested:
+    {{ total_invested|floatformat:2 }}
+</p>
+
+<p>
+    Current Value:
+    {{ total_value|floatformat:2 }}
+</p>
+
+<p>
+    Profit/Loss:
+    {{ total_profit_loss|floatformat:2 }}
+</p>
+
+<p>
+    Portfolio Return:
+    {{ portfolio_return_percentage|floatformat:2 }}%
+</p>
+
+<p>
+    Holdings:
+    {{ holdings|length }}
+</p>
+
+<p>
+    Base Currency:
+    {{ portfolio.base_currency }}
+</p>
+
+<p>
+    Created:
+    {{ portfolio.created_at }}
+</p>

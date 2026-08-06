@@ -1,0 +1,26 @@
+<h2>Best Performer</h2>
+
+{% if best_performer %}
+    <p>
+        {{ best_performer.asset.name }}
+        ({{ best_performer.asset.symbol }})
+        -
+        {{ best_performer.return_percentage|floatformat:2 }}%
+    </p>
+{% else %}
+    <p>No performance data available.</p>
+{% endif %}
+
+
+<h2>Worst Performer</h2>
+
+{% if worst_performer %}
+    <p>
+        {{ worst_performer.asset.name }}
+        ({{ worst_performer.asset.symbol }})
+        -
+        {{ worst_performer.return_percentage|floatformat:2 }}%
+    </p>
+{% else %}
+    <p>No performance data available.</p>
+{% endif %}

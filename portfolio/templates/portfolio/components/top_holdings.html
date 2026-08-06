@@ -1,0 +1,24 @@
+<h2>Top Holdings</h2>
+
+{% if top_holdings %}
+
+    <ol>
+
+    {% for holding in top_holdings|slice:":5" %}
+
+        <li>
+            {{ holding.asset.name }}
+            ({{ holding.asset.symbol }})
+            -
+            {{ holding.allocation_percentage|floatformat:2 }}%
+        </li>
+
+    {% endfor %}
+
+    </ol>
+
+{% else %}
+
+    <p>No holdings available.</p>
+
+{% endif %}

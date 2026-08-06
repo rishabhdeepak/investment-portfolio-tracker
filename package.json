@@ -1,0 +1,27 @@
+{
+  "name": "investment-portfolio-tracker",
+  "version": "1.0.0",
+  "description": "WealthTrack is a full-stack Django application for tracking investment portfolios across multiple asset classes. Users can manage multiple portfolios, record transactions, monitor real-time portfolio performance, and analyze their investments through a unified dashboard.",
+  "main": "index.js",
+  "scripts": {
+  "dev": "tailwindcss -i ./theme/input.css -o ./static/css/output.css --watch",
+  "build": "tailwindcss -i ./theme/input.css -o ./static/css/output.css --minify"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rishabhdeepak/investment-portfolio-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rishabhdeepak/investment-portfolio-tracker/issues"
+  },
+  "homepage": "https://github.com/rishabhdeepak/investment-portfolio-tracker#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "daisyui": "^5.7.16",
+    "tailwindcss": "^4.3.3"
+  }
+}

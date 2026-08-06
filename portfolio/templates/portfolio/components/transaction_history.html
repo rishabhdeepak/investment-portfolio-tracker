@@ -1,0 +1,39 @@
+<h2>Transaction History</h2>
+
+{% for transaction in transactions %}
+
+<div>
+	<p>
+		<strong>{{transaction.transaction_type}}</strong>
+		-
+		{{transaction.asset.name}}
+	</p>
+	<p>
+		Quantity: {{transaction.quantity}}
+	</p>
+	<p>
+		Price: {{transaction.price}}
+	</p>
+	<p>
+		Fees: {{transaction.fees}}
+	</p>
+	<p>
+		Taxes: {{transaction.taxes}}
+	</p>
+	<p>
+		Date: {{transaction.transaction_date}}
+	</p>
+	<a href="{% url 'update_transaction' portfolio.id transaction.id %}">
+		Edit Transaction
+	</a><br>
+	<a href="{% url 'delete_transaction' portfolio.id transaction.id %}">
+		Delete Transaction
+	</a>
+</div>
+<hr>
+
+{% empty %}
+
+	<p>No transactions found for this portfolio.</p>
+
+{% endfor %}

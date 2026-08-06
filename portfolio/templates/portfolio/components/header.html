@@ -1,0 +1,19 @@
+<h1>{{ portfolio.name }}</h1>
+
+<p>
+	<a href="{% url 'update_portfolio' portfolio.id %}">
+        Edit Portfolio
+    </a>
+</p>
+
+<p>
+	<a href="{% url 'delete_portfolio' portfolio.id %}">
+        Delete Portfolio
+    </a>
+</p>
+
+<h2>
+    <a href="{% url 'create_transaction' portfolio.id %}">
+        New Transaction
+    </a>
+</h2>

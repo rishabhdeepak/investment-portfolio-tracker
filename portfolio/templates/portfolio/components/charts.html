@@ -1,0 +1,8 @@
+<h2>Sector Allocation</h2>
+
+{% for sector, percentage in sector_allocation.items %}
+    <p>
+        {{ sector }}:
+        {{ percentage|floatformat:2 }}%
+    </p>
+{% endfor %}

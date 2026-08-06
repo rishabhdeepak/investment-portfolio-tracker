@@ -1,0 +1,44 @@
+<h2>Holdings</h2>
+
+{% for asset_id, data in holdings.items %}
+	<div>
+		<p>
+			Asset Name: 
+			<a href="{% url 'asset_detail' portfolio.id data.asset.id %}">
+    	{{ data.asset.name }}</a>
+		</p>
+
+		<p>
+			Quantity: {{ data.quantity }}
+		</p>
+
+		<p>
+			Average Buy Price: {{ data.avg_buy_price }}
+		</p>
+
+		<p>
+			Total Cost: {{ data.total_cost }}
+		</p>
+<p>
+    Current Price: {{ data.current_price|floatformat:2 }}
+</p>
+
+<p>
+    Current Value: {{ data.current_value|floatformat:2 }}
+</p>
+
+<p>
+    Profit/Loss:
+    {% if data.profit_loss >= 0 %}
+        +{{ data.profit_loss|floatformat:2 }}
+    {% else %}
+        {{ data.profit_loss|floatformat:2 }}
+    {% endif %}
+</p>
+
+		<br>
+	</div>
+
+	{% empty %}
+			<p>No holdings found for this portfolio.</p>
+{% endfor %}
