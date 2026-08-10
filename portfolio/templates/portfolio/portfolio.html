@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -16,4 +17,14 @@
 
 {% include 'portfolio/components/transaction_history.html' %}
 
+{{ sector_labels|json_script:"sector-labels" }}
+{{ sector_values|json_script:"sector-values" }}
+
+{{ asset_labels|json_script:"asset-labels" }}
+{{ asset_values|json_script:"asset-values" }}
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/portfolio.js' %}"></script>
+{% endblock scripts %}

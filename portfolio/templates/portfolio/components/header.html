@@ -1,19 +1,53 @@
-<h1>{{ portfolio.name }}</h1>
+<div class="mb-10">
 
-<p>
-	<a href="{% url 'update_portfolio' portfolio.id %}">
-        Edit Portfolio
-    </a>
-</p>
+    <div class="flex justify-between items-start">
 
-<p>
-	<a href="{% url 'delete_portfolio' portfolio.id %}">
-        Delete Portfolio
-    </a>
-</p>
+        <div>
 
-<h2>
-    <a href="{% url 'create_transaction' portfolio.id %}">
-        New Transaction
-    </a>
-</h2>
+            <p class="wt-label mb-2">
+                PORTFOLIO
+            </p>
+
+            <h1 class="text-5xl font-bold tracking-tight">
+                {{ portfolio.name }}
+            </h1>
+
+            <div class="flex gap-6 mt-4 text-sm text-slate-400">
+
+                <span>
+                    {{ portfolio.base_currency }}
+                </span>
+
+                <span>
+                    {{ holdings|length }} Assets
+                </span>
+
+                <span>
+                    Created {{ portfolio.created_at|date:"d M Y" }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="flex gap-3">
+
+            <a href="{% url 'create_transaction' portfolio.id %}"
+               class="btn btn-primary">
+
+                New Transaction
+
+            </a>
+
+            <a href="{% url 'update_portfolio' portfolio.id %}"
+               class="btn btn-outline">
+
+                Edit
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

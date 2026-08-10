@@ -1,0 +1,94 @@
+/* ===========================
+   WealthTrack Cards
+=========================== */
+
+.wt-card {
+    background: var(--wt-surface);
+    border: 1px solid var(--wt-border);
+    border-radius: 16px;
+    box-shadow: var(--wt-shadow);
+
+    transition: all .2s ease;
+}
+
+.wt-card:hover {
+    transform: translateY(-2px);
+    border-color: #3b82f6;
+}
+
+/* ===========================
+   Section Titles
+=========================== */
+
+.wt-section-title {
+
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    color: var(--wt-text);
+
+    margin-bottom: 1rem;
+
+}
+
+/* ===========================
+   KPI Label
+=========================== */
+
+.wt-label {
+
+    font-size: .75rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    color: var(--wt-text-muted);
+
+}
+
+/* ===========================
+   KPI Value
+=========================== */
+
+.wt-value {
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    color: var(--wt-text);
+
+}
+
+/* ===========================
+   Positive / Negative
+=========================== */
+
+.wt-positive {
+
+    color: var(--wt-success);
+
+}
+
+.wt-negative {
+
+    color: var(--wt-danger);
+
+}
+
+/* Header */
+
+.wt-label{
+
+    font-size:12px;
+
+    letter-spacing:.25em;
+
+    text-transform:uppercase;
+
+    color:#64748b;
+
+    font-weight:700;
+
+}

@@ -8,6 +8,7 @@ from .models import Asset
 from concurrent.futures import ThreadPoolExecutor
 from django.core.cache import cache
 from django.conf import settings
+import json
 
 @login_required(login_url='login')
 def portfolio(request, portfolio_id):
@@ -17,6 +18,20 @@ def portfolio(request, portfolio_id):
 
 	transactions = (portfolio.transactions.select_related('asset')
 				 .order_by('-transaction_date', '-id'))
+
+	sector_labels = list(summary['sector_allocation'].keys())
+	sector_values = [
+        float(value)
+        for value in summary['sector_allocation'].values()
+    ]
+	asset_labels = [
+        holding['asset'].symbol
+        for holding in summary['top_holdings']
+    ]
+	asset_values = [
+        float(holding['allocation_percentage'])
+        for holding in summary['top_holdings']
+    ]
 	
 	context = {'portfolio': portfolio,
 			   'holdings': summary['holdings'],
@@ -28,7 +43,11 @@ def portfolio(request, portfolio_id):
 			   'sector_allocation' : summary['sector_allocation'],
 			   'top_holdings' : summary['top_holdings'],
 			   'best_performer' : summary['best_performer'],
-			   'worst_performer' : summary['worst_performer']
+			   'worst_performer' : summary['worst_performer'],
+			   'sector_labels': sector_labels,
+			   'sector_values': sector_values,
+			   'asset_labels': asset_labels,
+			   'asset_values': asset_values,
 			   }
 	return render(request, 'portfolio/portfolio.html', context)
 

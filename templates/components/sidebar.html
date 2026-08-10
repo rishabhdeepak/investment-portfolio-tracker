@@ -1,10 +1,74 @@
-<hr>
+<aside class="w-64 min-h-screen bg-slate-900 border-r border-slate-800">
 
-<ul>
-    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-    <li><a href="{% url 'create_portfolio' %}">Create Portfolio</a></li>
-    <li><a href="{% url 'login' %}">Login</a></li>
-    <li><a href="{% url 'register' %}">Register</a></li>
-</ul>
+    <div class="p-6">
 
-<hr>
+        <p class="text-xs uppercase tracking-widest text-slate-500 mb-6">
+            Navigation
+        </p>
+
+        <ul class="space-y-2">
+
+            <li>
+                <a href="{% url 'dashboard' %}"
+                   class="flex items-center rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white transition">
+
+                    📊
+                    <span class="ml-3">
+                        Dashboard
+                    </span>
+
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'create_portfolio' %}"
+                   class="flex items-center rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white transition">
+
+                    💼
+                    <span class="ml-3">
+                        Create Portfolio
+                    </span>
+
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="absolute bottom-8 left-6">
+
+        {% if request.user.is_authenticated %}
+
+            <a href="{% url 'logout' %}"
+               class="text-red-400 hover:text-red-300 transition">
+
+                Logout
+
+            </a>
+
+        {% else %}
+
+            <div class="space-y-2">
+
+                <a href="{% url 'login' %}"
+                   class="block text-slate-300 hover:text-white">
+
+                    Login
+
+                </a>
+
+                <a href="{% url 'register' %}"
+                   class="block text-slate-300 hover:text-white">
+
+                    Register
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</aside>

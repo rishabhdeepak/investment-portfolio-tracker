@@ -1,44 +1,125 @@
-<h2>Holdings</h2>
+<div class="wt-card mt-8">
 
-{% for asset_id, data in holdings.items %}
-	<div>
-		<p>
-			Asset Name: 
-			<a href="{% url 'asset_detail' portfolio.id data.asset.id %}">
-    	{{ data.asset.name }}</a>
-		</p>
+    <div class="card-body">
 
-		<p>
-			Quantity: {{ data.quantity }}
-		</p>
+        <h2 class="wt-section-title">
+            Holdings
+        </h2>
 
-		<p>
-			Average Buy Price: {{ data.avg_buy_price }}
-		</p>
+        <div class="overflow-x-auto">
 
-		<p>
-			Total Cost: {{ data.total_cost }}
-		</p>
-<p>
-    Current Price: {{ data.current_price|floatformat:2 }}
-</p>
+            <table class="table">
 
-<p>
-    Current Value: {{ data.current_value|floatformat:2 }}
-</p>
+                <thead>
 
-<p>
-    Profit/Loss:
-    {% if data.profit_loss >= 0 %}
-        +{{ data.profit_loss|floatformat:2 }}
-    {% else %}
-        {{ data.profit_loss|floatformat:2 }}
-    {% endif %}
-</p>
+                    <tr>
 
-		<br>
-	</div>
+                        <th>Asset</th>
+                        <th>Quantity</th>
+                        <th>Avg Cost</th>
+                        <th>Current</th>
+                        <th>Value</th>
+                        <th>Return</th>
 
-	{% empty %}
-			<p>No holdings found for this portfolio.</p>
-{% endfor %}
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for asset_id, data in holdings.items %}
+
+                    <tr class="hover">
+
+                        <td>
+
+                            <div class="font-semibold">
+
+                                <a href="{% url 'asset_detail' portfolio.id data.asset.id %}"
+                                   class="hover:text-blue-400 transition">
+
+                                    {{ data.asset.name }}
+
+                                </a>
+
+                            </div>
+
+                            <div class="text-sm text-slate-400">
+
+                                {{ data.asset.symbol }}
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            {{ data.quantity }}
+
+                        </td>
+
+                        <td>
+
+                            ₹{{ data.avg_buy_price|floatformat:2 }}
+
+                        </td>
+
+                        <td>
+
+                            ₹{{ data.current_price|floatformat:2 }}
+
+                        </td>
+
+                        <td>
+
+                            ₹{{ data.current_value|floatformat:2 }}
+
+                        </td>
+
+                        <td>
+
+                            {% if data.profit_loss >= 0 %}
+
+                                <span class="wt-positive">
+
+                                    +₹{{ data.profit_loss|floatformat:2 }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="wt-negative">
+
+                                    ₹{{ data.profit_loss|floatformat:2 }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6" class="text-center py-10 text-slate-400">
+
+                            No holdings available.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

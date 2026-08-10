@@ -1,25 +1,51 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WealthTrack</title>
+
+    <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <title>WealthTrack</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
-<body>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen">
 
     {% include 'components/navbar.html' %}
-    {% include 'components/sidebar.html' %}
 
-    <main>
-        {% block content %}
-        {% endblock content %}
-    </main>
+    <div class="flex">
+
+        {% include 'components/sidebar.html' %}
+
+        <main class="flex-1 p-8">
+
+            {% block content %}
+            {% endblock content %}
+
+        </main>
+
+    </div>
+
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% block scripts %}
+    {% endblock scripts %}
 
 </body>
+
 </html>

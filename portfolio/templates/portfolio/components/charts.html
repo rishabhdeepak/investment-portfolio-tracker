@@ -1,8 +1,31 @@
-<h2>Sector Allocation</h2>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-10">
 
-{% for sector, percentage in sector_allocation.items %}
-    <p>
-        {{ sector }}:
-        {{ percentage|floatformat:2 }}%
-    </p>
-{% endfor %}
+    <div class="wt-card p-6">
+
+        <h2 class="text-xl font-semibold mb-6">
+            Asset Allocation
+        </h2>
+
+        <div class="h-72 flex justify-center items-center">
+
+            <canvas id="assetAllocationChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="wt-card p-6">
+
+        <h2 class="text-xl font-semibold mb-6">
+            Sector Allocation
+        </h2>
+
+        <div class="h-72 flex justify-center items-center">
+
+            <canvas id="sectorAllocationChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,33 @@
+/* ===========================
+   Application Layout
+=========================== */
+
+body {
+    background: var(--wt-bg);
+    color: var(--wt-text);
+    font-family: "Inter", sans-serif;
+}
+
+/* Main content */
+
+main {
+    padding: 2rem;
+}
+
+/* Sidebar */
+
+aside {
+
+    min-height: calc(100vh - 64px);
+
+}
+
+/* Responsive */
+
+@media (max-width: 1024px) {
+
+    aside {
+        width: 100%;
+    }
+
+}

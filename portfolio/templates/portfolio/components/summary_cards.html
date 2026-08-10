@@ -1,36 +1,59 @@
-<h2>Portfolio Summary</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
-<p>
-    Total Invested:
-    {{ total_invested|floatformat:2 }}
-</p>
+    <div class="wt-card p-6">
 
-<p>
-    Current Value:
-    {{ total_value|floatformat:2 }}
-</p>
+        <p class="wt-label">
+            Portfolio Value
+        </p>
 
-<p>
-    Profit/Loss:
-    {{ total_profit_loss|floatformat:2 }}
-</p>
+        <h2 class="text-4xl font-bold mt-3">
 
-<p>
-    Portfolio Return:
-    {{ portfolio_return_percentage|floatformat:2 }}%
-</p>
+            ₹{{ total_value|floatformat:2 }}
 
-<p>
-    Holdings:
-    {{ holdings|length }}
-</p>
+        </h2>
 
-<p>
-    Base Currency:
-    {{ portfolio.base_currency }}
-</p>
+    </div>
 
-<p>
-    Created:
-    {{ portfolio.created_at }}
-</p>
+    <div class="wt-card p-6">
+
+        <p class="wt-label">
+            Invested
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3">
+
+            ₹{{ total_invested|floatformat:2 }}
+
+        </h2>
+
+    </div>
+
+    <div class="wt-card p-6">
+
+        <p class="wt-label">
+            Profit
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3 {% if total_profit_loss >= 0 %}wt-positive{% else %}wt-negative{% endif %}">
+
+            ₹{{ total_profit_loss|floatformat:2 }}
+
+        </h2>
+
+    </div>
+
+    <div class="wt-card p-6">
+
+        <p class="wt-label">
+            Return
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3 {% if portfolio_return_percentage >= 0 %}wt-positive{% else %}wt-negative{% endif %}">
+
+            {{ portfolio_return_percentage|floatformat:2 }}%
+
+        </h2>
+
+    </div>
+
+</div>
