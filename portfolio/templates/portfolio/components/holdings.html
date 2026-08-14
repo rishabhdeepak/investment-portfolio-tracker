@@ -1,124 +1,194 @@
-<div class="wt-card mt-8">
+<div class="wt-card p-6 mb-10">
 
-    <div class="card-body">
+    <div class="flex items-center justify-between mb-6">
 
-        <h2 class="wt-section-title">
-            Holdings
-        </h2>
+        <div>
+            <h2 class="text-xl font-semibold text-white">
+                Holdings
+            </h2>
 
-        <div class="overflow-x-auto">
+            <p class="text-sm text-slate-400 mt-1">
+                Current positions across your portfolio
+            </p>
+        </div>
 
-            <table class="table">
+        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            {{ holdings|length }} position{{ holdings|length|pluralize }}
+        </span>
 
-                <thead>
+    </div>
 
-                    <tr>
 
-                        <th>Asset</th>
-                        <th>Quantity</th>
-                        <th>Avg Cost</th>
-                        <th>Current</th>
-                        <th>Value</th>
-                        <th>Return</th>
+    <div class="overflow-x-auto">
 
-                    </tr>
+        <table class="w-full text-left">
 
-                </thead>
+            <thead>
 
-                <tbody>
+                <tr class="border-b border-slate-700">
 
-                    {% for asset_id, data in holdings.items %}
+                    <th class="py-4 pr-6 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider">
+                        Asset
+                    </th>
 
-                    <tr class="hover">
+                    <th class="py-4 px-4 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider">
+                        Quantity
+                    </th>
 
-                        <td>
+                    <th class="py-4 px-4 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider">
+                        Avg Cost
+                    </th>
 
-                            <div class="font-semibold">
+                    <th class="py-4 px-4 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider">
+                        Current
+                    </th>
 
-                                <a href="{% url 'asset_detail' portfolio.id data.asset.id %}"
-                                   class="hover:text-blue-400 transition">
+                    <th class="py-4 px-4 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider">
+                        Value
+                    </th>
 
-                                    {{ data.asset.name }}
+                    <th class="py-4 pl-4 text-xs font-medium
+                               text-slate-400 uppercase tracking-wider text-right">
+                        Return
+                    </th>
 
-                                </a>
+                </tr>
 
-                            </div>
+            </thead>
 
-                            <div class="text-sm text-slate-400">
 
-                                {{ data.asset.symbol }}
+            <tbody class="divide-y divide-slate-800">
 
-                            </div>
+                {% for asset_id, data in holdings.items %}
 
-                        </td>
+                <tr class="group hover:bg-slate-800/40 transition-colors">
 
-                        <td>
+                    <!-- Asset -->
+                    <td class="py-5 pr-6">
 
-                            {{ data.quantity }}
+                        <a href="{% url 'asset_detail' portfolio.id data.asset.id %}"
+                           class="font-semibold text-white
+                                  group-hover:text-blue-400 transition-colors">
 
-                        </td>
+                            {{ data.asset.name }}
 
-                        <td>
+                        </a>
 
-                            ₹{{ data.avg_buy_price|floatformat:2 }}
+                        <div class="text-sm text-slate-500 mt-1">
 
-                        </td>
+                            {{ data.asset.symbol }}
 
-                        <td>
+                        </div>
+
+                    </td>
+
+
+                    <!-- Quantity -->
+                    <td class="py-5 px-4 text-slate-300 whitespace-nowrap">
+
+                        {{ data.quantity }}
+
+                    </td>
+
+
+                    <!-- Average Cost -->
+                    <td class="py-5 px-4 text-slate-300 whitespace-nowrap">
+
+                        ₹{{ data.avg_buy_price|floatformat:2 }}
+
+                    </td>
+
+
+                    <!-- Current Price -->
+                    <td class="py-5 px-4 text-slate-300 whitespace-nowrap">
+
+                        {% if data.current_price is not None %}
 
                             ₹{{ data.current_price|floatformat:2 }}
 
-                        </td>
+                        {% else %}
 
-                        <td>
+                            <span class="text-slate-500">
+                                —
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- Current Value -->
+                    <td class="py-5 px-4 font-medium text-white whitespace-nowrap">
+
+                        {% if data.current_value is not None %}
 
                             ₹{{ data.current_value|floatformat:2 }}
 
-                        </td>
+                        {% else %}
 
-                        <td>
+                            <span class="text-slate-500">
+                                —
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- Profit / Loss -->
+                    <td class="py-5 pl-4 text-right whitespace-nowrap">
+
+                        {% if data.profit_loss is not None %}
 
                             {% if data.profit_loss >= 0 %}
 
-                                <span class="wt-positive">
-
+                                <span class="font-semibold text-emerald-400">
                                     +₹{{ data.profit_loss|floatformat:2 }}
-
                                 </span>
 
                             {% else %}
 
-                                <span class="wt-negative">
-
+                                <span class="font-semibold text-red-400">
                                     ₹{{ data.profit_loss|floatformat:2 }}
-
                                 </span>
 
                             {% endif %}
 
-                        </td>
+                        {% else %}
 
-                    </tr>
+                            <span class="text-slate-500">
+                                —
+                            </span>
 
-                    {% empty %}
+                        {% endif %}
 
-                    <tr>
+                    </td>
 
-                        <td colspan="6" class="text-center py-10 text-slate-400">
+                </tr>
 
-                            No holdings available.
+                {% empty %}
 
-                        </td>
+                <tr>
 
-                    </tr>
+                    <td colspan="6"
+                        class="py-12 text-center text-slate-500">
 
-                    {% endfor %}
+                        No holdings available.
 
-                </tbody>
+                    </td>
 
-            </table>
+                </tr>
 
-        </div>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
 
     </div>
 

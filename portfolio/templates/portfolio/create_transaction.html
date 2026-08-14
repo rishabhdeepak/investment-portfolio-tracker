@@ -2,50 +2,385 @@
 
 {% block content %}
 
-<h1>Add Transaction</h1>
+<div class="max-w-4xl mx-auto">
 
-<h3>{{ portfolio.name }}</h3>
+    <!-- Page Header -->
 
-<h3>Search Assets</h3>
+    <div class="mb-8">
 
-<input type="text" id="asset-search" placeholder="Search stocks, ETFs, crypto...">
+        <a href="{% url 'portfolio' portfolio.id %}"
+           class="text-sm text-slate-400 hover:text-white transition-colors">
 
-<div id="search-results"></div>
+            ← Back to Portfolio
 
-<form method="POST">
-{% csrf_token %}
-<input type="hidden" id="selected-symbol" name="symbol">
-<input type="hidden" id="selected-name" name="asset_name">
-<input type="hidden" id="selected-type" name="quote_type">
-<input type="hidden" id="selected-exchange" name="exchange">
-<input type="hidden" id="selected-sector" name="sector">
-<input type="hidden" id="selected-industry" name="industry">
+        </a>
 
-{{ form.transaction_type.label_tag }}
-{{ form.transaction_type }}
+        <h1 class="text-3xl font-bold text-white mt-4">
+            Add Transaction
+        </h1>
 
-{{ form.quantity.label_tag }}
-{{ form.quantity }}
+        <p class="text-slate-400 mt-2">
+            Add a transaction to
+            <span class="text-slate-200 font-medium">
+                {{ portfolio.name }}
+            </span>
+        </p>
 
-{{ form.price.label_tag }}
-{{ form.price }}
+    </div>
 
-{{ form.fees.label_tag }}
-{{ form.fees }}
 
-{{ form.taxes.label_tag }}
-{{ form.taxes }}
+    <div class="wt-card p-8">
 
-{{ form.transaction_date.label_tag }}
-{{ form.transaction_date }}
+        <!-- Asset Search -->
 
-{{ form.notes.label_tag }}
-{{ form.notes }}
+        <div class="mb-10">
 
-    <button type="submit">
-        Save Transaction
-    </button>
-</form>
+            <div class="mb-4">
+
+                <h2 class="text-lg font-semibold text-white">
+                    Select Asset
+                </h2>
+
+                <p class="text-sm text-slate-400 mt-1">
+                    Search for a stock, ETF, or other supported asset.
+                </p>
+
+            </div>
+
+
+            <div class="relative">
+
+                <input
+                    type="text"
+                    id="asset-search"
+                    placeholder="Search stocks, ETFs, crypto..."
+                    class="w-full px-4 py-3 rounded-xl
+                           bg-slate-900
+                           border border-slate-700
+                           text-white
+                           placeholder-slate-500
+                           outline-none
+                           focus:border-blue-500
+                           focus:ring-2
+                           focus:ring-blue-500/20
+                           transition"
+                >
+
+
+                <div
+                    id="search-results"
+                    class="mt-2 overflow-hidden rounded-xl
+                           border border-slate-700
+                           bg-slate-900
+                           shadow-xl"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Transaction Form -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- Hidden Asset Data -->
+
+            <input type="hidden"
+                   id="selected-symbol"
+                   name="symbol">
+
+            <input type="hidden"
+                   id="selected-name"
+                   name="asset_name">
+
+            <input type="hidden"
+                   id="selected-type"
+                   name="quote_type">
+
+            <input type="hidden"
+                   id="selected-exchange"
+                   name="exchange">
+
+            <input type="hidden"
+                   id="selected-sector"
+                   name="sector">
+
+            <input type="hidden"
+                   id="selected-industry"
+                   name="industry">
+
+
+            <div class="border-t border-slate-800 pt-8">
+
+                <div class="mb-6">
+
+                    <h2 class="text-lg font-semibold text-white">
+                        Transaction Details
+                    </h2>
+
+                    <p class="text-sm text-slate-400 mt-1">
+                        Enter the details of your transaction.
+                    </p>
+
+                </div>
+
+
+                <!-- Transaction Type -->
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.transaction_type.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.transaction_type.label }}
+
+                    </label>
+
+                    {{ form.transaction_type }}
+
+                    {% if form.transaction_type.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+
+                            {{ form.transaction_type.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Quantity + Price -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div class="mb-6">
+
+                        <label
+                            for="{{ form.quantity.id_for_label }}"
+                            class="block text-sm font-medium
+                                   text-slate-300 mb-2">
+
+                            {{ form.quantity.label }}
+
+                        </label>
+
+                        {{ form.quantity }}
+
+                        {% if form.quantity.errors %}
+
+                            <div class="mt-2 text-sm text-red-400">
+
+                                {{ form.quantity.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="mb-6">
+
+                        <label
+                            for="{{ form.price.id_for_label }}"
+                            class="block text-sm font-medium
+                                   text-slate-300 mb-2">
+
+                            {{ form.price.label }}
+
+                        </label>
+
+                        {{ form.price }}
+
+                        {% if form.price.errors %}
+
+                            <div class="mt-2 text-sm text-red-400">
+
+                                {{ form.price.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Fees + Taxes -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div class="mb-6">
+
+                        <label
+                            for="{{ form.fees.id_for_label }}"
+                            class="block text-sm font-medium
+                                   text-slate-300 mb-2">
+
+                            {{ form.fees.label }}
+
+                        </label>
+
+                        {{ form.fees }}
+
+                        {% if form.fees.errors %}
+
+                            <div class="mt-2 text-sm text-red-400">
+
+                                {{ form.fees.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="mb-6">
+
+                        <label
+                            for="{{ form.taxes.id_for_label }}"
+                            class="block text-sm font-medium
+                                   text-slate-300 mb-2">
+
+                            {{ form.taxes.label }}
+
+                        </label>
+
+                        {{ form.taxes }}
+
+                        {% if form.taxes.errors %}
+
+                            <div class="mt-2 text-sm text-red-400">
+
+                                {{ form.taxes.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Transaction Date -->
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.transaction_date.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.transaction_date.label }}
+
+                    </label>
+
+                    {{ form.transaction_date }}
+
+                    {% if form.transaction_date.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+
+                            {{ form.transaction_date.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Notes -->
+
+                <div class="mb-8">
+
+                    <label
+                        for="{{ form.notes.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.notes.label }}
+
+                    </label>
+
+                    {{ form.notes }}
+
+                    {% if form.notes.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+
+                            {{ form.notes.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Non-field Errors -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="mb-6 p-4 rounded-xl
+                                bg-red-500/10
+                                border border-red-500/20
+                                text-sm text-red-400">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Actions -->
+
+                <div class="flex items-center justify-end gap-3">
+
+                    <a
+                        href="{% url 'portfolio' portfolio.id %}"
+                        class="px-5 py-2.5 rounded-lg
+                               border border-slate-700
+                               text-sm font-medium
+                               text-slate-300
+                               hover:bg-slate-800
+                               hover:text-white
+                               transition-colors">
+
+                        Cancel
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Save Transaction
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 
 <script>
 
@@ -53,6 +388,7 @@ const searchBox = document.getElementById('asset-search');
 const resultsDiv = document.getElementById('search-results');
 
 let searchTimeout;
+
 
 searchBox.addEventListener('input', () => {
 
@@ -63,9 +399,13 @@ searchBox.addEventListener('input', () => {
         const query = searchBox.value.trim();
 
         if (query.length < 2) {
+
             resultsDiv.innerHTML = '';
+
             return;
+
         }
+
 
         try {
 
@@ -77,33 +417,51 @@ searchBox.addEventListener('input', () => {
 
             resultsDiv.innerHTML = '';
 
+
             results.forEach(asset => {
 
                 const div = document.createElement('div');
 
-                div.innerText = `${asset.name} (${asset.symbol})`;
+                div.innerText =
+                    `${asset.name} (${asset.symbol})`;
 
-                div.style.cursor = 'pointer';
+                div.className =
+                    'px-4 py-3 text-sm text-slate-300 ' +
+                    'hover:bg-slate-800 hover:text-white ' +
+                    'cursor-pointer transition-colors';
+
 
                 div.addEventListener('click', () => {
 
-                    document.getElementById('selected-symbol').value =
-                        asset.symbol;
+                    document.getElementById(
+                        'selected-symbol'
+                    ).value = asset.symbol;
 
-                    document.getElementById('selected-name').value =
-                        asset.name;
 
-                    document.getElementById('selected-type').value =
-                        asset.quote_type;
+                    document.getElementById(
+                        'selected-name'
+                    ).value = asset.name;
 
-                    document.getElementById('selected-exchange').value =
-                        asset.exchange || '';
 
-                    document.getElementById('selected-sector').value =
-                        asset.sector || '';
+                    document.getElementById(
+                        'selected-type'
+                    ).value = asset.quote_type;
 
-                    document.getElementById('selected-industry').value =
-                        asset.industry || '';
+
+                    document.getElementById(
+                        'selected-exchange'
+                    ).value = asset.exchange || '';
+
+
+                    document.getElementById(
+                        'selected-sector'
+                    ).value = asset.sector || '';
+
+
+                    document.getElementById(
+                        'selected-industry'
+                    ).value = asset.industry || '';
+
 
                     searchBox.value =
                         `${asset.name} (${asset.symbol})`;
@@ -112,13 +470,14 @@ searchBox.addEventListener('input', () => {
 
                 });
 
+
                 resultsDiv.appendChild(div);
 
             });
 
         }
 
-        catch(error) {
+        catch (error) {
 
             console.error("Fetch Error:", error);
 

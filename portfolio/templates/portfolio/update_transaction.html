@@ -2,24 +2,290 @@
 
 {% block content %}
 
-<h1>Update Transaction</h1>
+<div class="max-w-3xl mx-auto">
 
-<h3>{{ portfolio.name }}</h3>
+    <!-- Page Header -->
 
-<p>
-    Asset:
-    {{ transaction.asset.name }}
-    ({{ transaction.asset.symbol }})
-</p>
+    <div class="mb-8">
 
-<form method="POST">
-    {% csrf_token %}
+        <a href="{% url 'portfolio' portfolio.id %}"
+           class="text-sm text-slate-400 hover:text-white transition-colors">
 
-    {{ form.as_p }}
+            ← Back to Portfolio
 
-    <button type="submit">
-        Update Transaction
-    </button>
-</form>
+        </a>
+
+        <h1 class="text-3xl font-bold text-white mt-4">
+            Update Transaction
+        </h1>
+
+        <p class="text-slate-400 mt-2">
+            Edit the details of this transaction.
+        </p>
+
+    </div>
+
+
+    <!-- Asset Information -->
+
+    <div class="wt-card p-6 mb-6">
+
+        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">
+            Asset
+        </p>
+
+        <p class="text-lg font-semibold text-white mt-2">
+            {{ transaction.asset.name }}
+        </p>
+
+        <p class="text-sm text-slate-400 mt-1">
+            {{ transaction.asset.symbol }}
+        </p>
+
+    </div>
+
+
+    <!-- Transaction Form -->
+
+    <div class="wt-card p-8">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="mb-6 p-4 rounded-xl
+                            bg-red-500/10
+                            border border-red-500/20
+                            text-sm text-red-400">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Transaction Type -->
+
+            <div class="mb-6">
+
+                <label
+                    for="{{ form.transaction_type.id_for_label }}"
+                    class="block text-sm font-medium
+                           text-slate-300 mb-2">
+
+                    {{ form.transaction_type.label }}
+
+                </label>
+
+                {{ form.transaction_type }}
+
+                {% if form.transaction_type.errors %}
+
+                    <div class="mt-2 text-sm text-red-400">
+                        {{ form.transaction_type.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Quantity + Price -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.quantity.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.quantity.label }}
+
+                    </label>
+
+                    {{ form.quantity }}
+
+                    {% if form.quantity.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+                            {{ form.quantity.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.price.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.price.label }}
+
+                    </label>
+
+                    {{ form.price }}
+
+                    {% if form.price.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+                            {{ form.price.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Fees + Taxes -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.fees.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.fees.label }}
+
+                    </label>
+
+                    {{ form.fees }}
+
+                    {% if form.fees.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+                            {{ form.fees.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="mb-6">
+
+                    <label
+                        for="{{ form.taxes.id_for_label }}"
+                        class="block text-sm font-medium
+                               text-slate-300 mb-2">
+
+                        {{ form.taxes.label }}
+
+                    </label>
+
+                    {{ form.taxes }}
+
+                    {% if form.taxes.errors %}
+
+                        <div class="mt-2 text-sm text-red-400">
+                            {{ form.taxes.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Transaction Date -->
+
+            <div class="mb-6">
+
+                <label
+                    for="{{ form.transaction_date.id_for_label }}"
+                    class="block text-sm font-medium
+                           text-slate-300 mb-2">
+
+                    {{ form.transaction_date.label }}
+
+                </label>
+
+                {{ form.transaction_date }}
+
+                {% if form.transaction_date.errors %}
+
+                    <div class="mt-2 text-sm text-red-400">
+                        {{ form.transaction_date.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Notes -->
+
+            <div class="mb-8">
+
+                <label
+                    for="{{ form.notes.id_for_label }}"
+                    class="block text-sm font-medium
+                           text-slate-300 mb-2">
+
+                    {{ form.notes.label }}
+
+                </label>
+
+                {{ form.notes }}
+
+                {% if form.notes.errors %}
+
+                    <div class="mt-2 text-sm text-red-400">
+                        {{ form.notes.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="flex items-center justify-end gap-3">
+
+                <a
+                    href="{% url 'portfolio' portfolio.id %}"
+                    class="px-5 py-2.5 rounded-lg
+                           border border-slate-700
+                           text-sm font-medium
+                           text-slate-300
+                           hover:bg-slate-800
+                           hover:text-white
+                           transition-colors">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    Update Transaction
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 {% endblock content %}

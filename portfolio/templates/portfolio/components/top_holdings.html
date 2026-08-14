@@ -1,24 +1,122 @@
-<h2>Top Holdings</h2>
+<div class="wt-card p-6">
 
-{% if top_holdings %}
+    <div class="flex items-center justify-between mb-6">
 
-    <ol>
+        <div class="flex items-center gap-3">
 
-    {% for holding in top_holdings|slice:":5" %}
+            <i data-lucide="layers-3"
+               class="w-6 h-6 text-blue-400 flex-shrink-0">
+            </i>
 
-        <li>
-            {{ holding.asset.name }}
-            ({{ holding.asset.symbol }})
-            -
-            {{ holding.allocation_percentage|floatformat:2 }}%
-        </li>
+            <div>
 
-    {% endfor %}
+                <h2 class="text-xl font-semibold text-white">
+                    Top Holdings
+                </h2>
 
-    </ol>
+                <p class="text-sm text-slate-400 mt-1">
+                    Largest positions by portfolio allocation
+                </p>
 
-{% else %}
+            </div>
 
-    <p>No holdings available.</p>
+        </div>
 
-{% endif %}
+
+        <span class="text-xs font-medium text-slate-400
+                     uppercase tracking-wider">
+
+            Allocation
+
+        </span>
+
+    </div>
+
+
+    {% if top_holdings %}
+
+        <div class="space-y-4">
+
+            {% for holding in top_holdings|slice:":5" %}
+
+                <div class="flex items-center gap-4">
+
+
+                    <!-- Rank -->
+
+                    <div class="w-8 h-8 rounded-lg
+                                bg-slate-800
+                                border border-slate-700
+                                flex items-center justify-center
+                                text-sm font-semibold
+                                text-slate-300
+                                flex-shrink-0">
+
+                        {{ forloop.counter }}
+
+                    </div>
+
+
+                    <!-- Asset Information -->
+
+                    <div class="flex-1 min-w-0">
+
+                        <p class="font-medium text-white truncate">
+
+                            {{ holding.asset.name }}
+
+                        </p>
+
+                        <p class="text-sm text-slate-400">
+
+                            {{ holding.asset.symbol }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Allocation -->
+
+                    <div class="text-right">
+
+                        <p class="font-semibold text-white">
+
+                            {{ holding.allocation_percentage|floatformat:2 }}%
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- Empty State -->
+
+        <div class="py-8 text-center">
+
+            <i data-lucide="layers-3"
+               class="w-8 h-8
+                      mx-auto
+                      text-slate-600">
+            </i>
+
+            <p class="text-slate-400 mt-3">
+
+                No holdings available.
+
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+</div>

@@ -1,26 +1,145 @@
-<h2>Best Performer</h2>
-
-{% if best_performer %}
-    <p>
-        {{ best_performer.asset.name }}
-        ({{ best_performer.asset.symbol }})
-        -
-        {{ best_performer.return_percentage|floatformat:2 }}%
-    </p>
-{% else %}
-    <p>No performance data available.</p>
-{% endif %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
 
 
-<h2>Worst Performer</h2>
+    <!-- Best Performer -->
 
-{% if worst_performer %}
-    <p>
-        {{ worst_performer.asset.name }}
-        ({{ worst_performer.asset.symbol }})
-        -
-        {{ worst_performer.return_percentage|floatformat:2 }}%
-    </p>
-{% else %}
-    <p>No performance data available.</p>
-{% endif %}
+    <div class="wt-card p-6">
+
+        <div class="flex items-center gap-3 mb-6">
+
+            <i data-lucide="trending-up"
+               class="w-6 h-6 text-emerald-400 flex-shrink-0">
+            </i>
+
+            <div>
+
+                <h2 class="text-lg font-semibold text-white">
+                    Best Performer
+                </h2>
+
+                <p class="text-sm text-slate-400">
+                    Highest return in your portfolio
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if best_performer %}
+
+            <div>
+
+                <p class="text-base font-medium text-white leading-relaxed">
+                    {{ best_performer.asset.name }}
+                </p>
+
+                <p class="text-sm text-slate-400 mt-1">
+                    {{ best_performer.asset.symbol }}
+                </p>
+
+
+                {% if best_performer.return_percentage >= 0 %}
+
+                    <p class="text-3xl font-bold text-emerald-400 mt-5">
+
+                        +{{ best_performer.return_percentage|floatformat:2 }}%
+
+                    </p>
+
+                {% else %}
+
+                    <p class="text-3xl font-bold text-red-400 mt-5">
+
+                        {{ best_performer.return_percentage|floatformat:2 }}%
+
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+            <p class="text-slate-400">
+                No performance data available.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- Worst Performer -->
+
+    <div class="wt-card p-6">
+
+        <div class="flex items-center gap-3 mb-6">
+
+            <i data-lucide="trending-down"
+               class="w-6 h-6 text-red-400 flex-shrink-0">
+            </i>
+
+            <div>
+
+                <h2 class="text-lg font-semibold text-white">
+                    Worst Performer
+                </h2>
+
+                <p class="text-sm text-slate-400">
+                    Lowest return in your portfolio
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if worst_performer %}
+
+            <div>
+
+                <p class="text-base font-medium text-white leading-relaxed">
+                    {{ worst_performer.asset.name }}
+                </p>
+
+                <p class="text-sm text-slate-400 mt-1">
+                    {{ worst_performer.asset.symbol }}
+                </p>
+
+
+                {% if worst_performer.return_percentage >= 0 %}
+
+                    <p class="text-3xl font-bold text-emerald-400 mt-5">
+
+                        +{{ worst_performer.return_percentage|floatformat:2 }}%
+
+                    </p>
+
+                {% else %}
+
+                    <p class="text-3xl font-bold text-red-400 mt-5">
+
+                        {{ worst_performer.return_percentage|floatformat:2 }}%
+
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+            <p class="text-slate-400">
+                No performance data available.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+</div>

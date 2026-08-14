@@ -2,18 +2,144 @@
 
 {% block content %}
 
-<h1>Update Transaction</h1>
+<div class="max-w-2xl mx-auto">
 
-<h3>{{ portfolio.name }}</h3>
+    <!-- Page Header -->
 
-<form method="POST">
-    {% csrf_token %}
+    <div class="mb-8">
 
-    {{ form.as_p }}
+        <a href="{% url 'portfolio' portfolio.id %}"
+           class="text-sm text-slate-400 hover:text-white transition-colors">
 
-    <button type="submit">
-        Update Portfolio
-    </button>
-</form>
+            ← Back to Portfolio
+
+        </a>
+
+        <h1 class="text-3xl font-bold text-white mt-4">
+            Update Portfolio
+        </h1>
+
+        <p class="text-slate-400 mt-2">
+            Update the settings for
+            <span class="text-slate-200 font-medium">
+                {{ portfolio.name }}
+            </span>
+        </p>
+
+    </div>
+
+
+    <!-- Form Card -->
+
+    <div class="wt-card p-8">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="mb-6 p-4 rounded-xl
+                            bg-red-500/10
+                            border border-red-500/20
+                            text-sm text-red-400">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Portfolio Name -->
+
+            <div class="mb-6">
+
+                <label
+                    for="{{ form.name.id_for_label }}"
+                    class="block text-sm font-medium
+                           text-slate-300 mb-2">
+
+                    {{ form.name.label }}
+
+                </label>
+
+                {{ form.name }}
+
+                {% if form.name.errors %}
+
+                    <div class="mt-2 text-sm text-red-400">
+
+                        {{ form.name.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Base Currency -->
+
+            <div class="mb-8">
+
+                <label
+                    for="{{ form.base_currency.id_for_label }}"
+                    class="block text-sm font-medium
+                           text-slate-300 mb-2">
+
+                    {{ form.base_currency.label }}
+
+                </label>
+
+                {{ form.base_currency }}
+
+                {% if form.base_currency.errors %}
+
+                    <div class="mt-2 text-sm text-red-400">
+
+                        {{ form.base_currency.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="flex items-center justify-end gap-3">
+
+                <a
+                    href="{% url 'portfolio' portfolio.id %}"
+                    class="px-5 py-2.5 rounded-lg
+                           border border-slate-700
+                           text-sm font-medium
+                           text-slate-300
+                           hover:bg-slate-800
+                           hover:text-white
+                           transition-colors">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    Update Portfolio
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 {% endblock content %}

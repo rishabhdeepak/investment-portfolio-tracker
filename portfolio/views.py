@@ -131,7 +131,7 @@ def delete_transaction(request, portfolio_id, transaction_id):
 	if request.method == 'POST':
 		transaction.delete()
 		return redirect('portfolio', portfolio_id=portfolio.id)
-	context = {'portfolio': portfolio, 'obj': transaction}
+	context = {'portfolio': portfolio, 'obj': transaction, 'object_type': 'transaction'}
 	return render(request, 'portfolio/delete.html', context)
 
 @login_required(login_url='login')
@@ -152,8 +152,8 @@ def delete_portfolio(request, portfolio_id):
 	portfolio = get_object_or_404(request.user.portfolios, id=portfolio_id)
 	if request.method == 'POST':
 		portfolio.delete()
-		return redirect('home')
-	context = {'obj': portfolio}
+		return redirect('dashboard')
+	context = {'obj': portfolio, 'object_type': 'portfolio'}
 	return render(request, 'portfolio/delete.html', context)
 
 @login_required(login_url='login')

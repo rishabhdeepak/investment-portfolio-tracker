@@ -1,10 +1,21 @@
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
+
+    <!-- Portfolio Value -->
+
     <div class="wt-card p-6">
 
-        <p class="wt-label">
-            Portfolio Value
-        </p>
+        <div class="flex items-center justify-between">
+
+            <p class="wt-label">
+                Portfolio Value
+            </p>
+
+            <i data-lucide="wallet"
+               class="w-5 h-5 text-slate-500">
+            </i>
+
+        </div>
 
         <h2 class="text-4xl font-bold mt-3">
 
@@ -14,11 +25,23 @@
 
     </div>
 
+
+
+    <!-- Invested -->
+
     <div class="wt-card p-6">
 
-        <p class="wt-label">
-            Invested
-        </p>
+        <div class="flex items-center justify-between">
+
+            <p class="wt-label">
+                Invested
+            </p>
+
+            <i data-lucide="banknote"
+               class="w-5 h-5 text-slate-500">
+            </i>
+
+        </div>
 
         <h2 class="text-4xl font-bold mt-3">
 
@@ -28,32 +51,85 @@
 
     </div>
 
+
+
+    <!-- Profit -->
+
     <div class="wt-card p-6">
 
-        <p class="wt-label">
-            Profit
-        </p>
+        <div class="flex items-center justify-between">
 
-        <h2 class="text-4xl font-bold mt-3 {% if total_profit_loss >= 0 %}wt-positive{% else %}wt-negative{% endif %}">
+            <p class="wt-label">
+                Profit
+            </p>
 
-            ₹{{ total_profit_loss|floatformat:2 }}
+            {% if total_profit_loss >= 0 %}
+
+                <i data-lucide="trending-up"
+                   class="w-5 h-5 text-emerald-400">
+                </i>
+
+            {% else %}
+
+                <i data-lucide="trending-down"
+                   class="w-5 h-5 text-red-400">
+                </i>
+
+            {% endif %}
+
+        </div>
+
+        <h2 class="text-4xl font-bold mt-3
+                   {% if total_profit_loss >= 0 %}
+                       wt-positive
+                   {% else %}
+                       wt-negative
+                   {% endif %}">
+
+            {% if total_profit_loss >= 0 %}
+                +₹{{ total_profit_loss|floatformat:2 }}
+            {% else %}
+                ₹{{ total_profit_loss|floatformat:2 }}
+            {% endif %}
 
         </h2>
 
     </div>
 
+
+
+    <!-- Return -->
+
     <div class="wt-card p-6">
 
-        <p class="wt-label">
-            Return
-        </p>
+        <div class="flex items-center justify-between">
 
-        <h2 class="text-4xl font-bold mt-3 {% if portfolio_return_percentage >= 0 %}wt-positive{% else %}wt-negative{% endif %}">
+            <p class="wt-label">
+                Return
+            </p>
 
-            {{ portfolio_return_percentage|floatformat:2 }}%
+            <i data-lucide="percent"
+               class="w-5 h-5 text-slate-500">
+            </i>
+
+        </div>
+
+        <h2 class="text-4xl font-bold mt-3
+                   {% if portfolio_return_percentage >= 0 %}
+                       wt-positive
+                   {% else %}
+                       wt-negative
+                   {% endif %}">
+
+            {% if portfolio_return_percentage >= 0 %}
+                +{{ portfolio_return_percentage|floatformat:2 }}%
+            {% else %}
+                {{ portfolio_return_percentage|floatformat:2 }}%
+            {% endif %}
 
         </h2>
 
     </div>
+
 
 </div>

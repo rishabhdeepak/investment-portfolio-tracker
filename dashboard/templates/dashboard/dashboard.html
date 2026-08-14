@@ -2,84 +2,556 @@
 
 {% block content %}
 
-<h1>Dashboard</h1>
+<div class="space-y-10">
 
-<h2>Overall Portfolio Summary</h2>
+    <!-- ========================================================= -->
+    <!-- Dashboard Header -->
+    <!-- ========================================================= -->
 
-<p>Total Invested: {{ total_invested|floatformat:2 }}</p>
+    <div class="flex justify-between items-start">
 
-<p>Current Value: {{ total_value|floatformat:2 }}</p>
+        <div>
 
-<p>Profit/Loss: {{ total_profit_loss|floatformat:2 }}</p>
+            <p class="wt-label mb-2">
+                OVERVIEW
+            </p>
 
-<p>Return: {{ total_return_percentage|floatformat:2 }}%</p>
+            <h1 class="text-4xl font-bold tracking-tight text-white">
+                Dashboard
+            </h1>
 
-<hr>
+            <p class="text-slate-400 mt-2">
+                Track your investments across all portfolios.
+            </p>
 
-<h2>Combined Stock Allocation</h2>
+        </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Stock</th>
-            <th>Value</th>
-            <th>Allocation</th>
-        </tr>
-    </thead>
+        <a href="{% url 'create_portfolio' %}"
+           class="btn btn-primary">
 
-    <tbody>
-    {% for symbol, data in combined_stock_allocation.items %}
-        <tr>
-            <td>{{ symbol }}</td>
-            <td>{{ data.value|floatformat:2 }}</td>
-            <td>{{ data.allocation_percentage|floatformat:2 }}%</td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="3">No holdings found.</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+            New Portfolio
 
-<h2>Combined Sector Allocation</h2>
+        </a>
 
-<table>
-    <thead>
-        <tr>
-            <th>Sector</th>
-            <th>Value</th>
-            <th>Allocation</th>
-        </tr>
-    </thead>
+    </div>
 
-    <tbody>
-    {% for sector, data in combined_sector_allocation.items %}
-        <tr>
-            <td>{{ sector }}</td>
-            <td>{{ data.value|floatformat:2 }}</td>
-            <td>{{ data.allocation_percentage|floatformat:2 }}%</td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="3">No sectors found.</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
 
-<h2>My Portfolios</h2>
+    <!-- ========================================================= -->
+    <!-- Overall Portfolio Summary -->
+    <!-- ========================================================= -->
 
-{% for portfolio in portfolios %}
+    <section>
 
-    <a href="{% url 'portfolio' portfolio.id %}">
-        <h3>{{ portfolio.name }}</h3>
-    </a>
+        <div class="mb-4">
 
-{% empty %}
+            <h2 class="wt-section-title">
+                Overall Portfolio
+            </h2>
 
-    <p>You don't have any portfolios yet!</p>
+            <p class="text-sm text-slate-400 mt-1">
+                Combined performance across all your portfolios.
+            </p>
 
-{% endfor %}
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+
+
+            <!-- Total Invested -->
+
+            <div class="card bg-slate-900 border border-slate-800 shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Total Invested
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        ₹{{ total_invested|floatformat:2 }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Current Value -->
+
+            <div class="card bg-slate-900 border border-slate-800 shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Current Value
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        ₹{{ total_value|floatformat:2 }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Profit / Loss -->
+
+            <div class="card bg-slate-900 border border-slate-800 shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Profit / Loss
+                    </p>
+
+                    {% if total_profit_loss >= 0 %}
+
+                        <p class="text-2xl font-bold wt-positive mt-2">
+                            +₹{{ total_profit_loss|floatformat:2 }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="text-2xl font-bold wt-negative mt-2">
+                            ₹{{ total_profit_loss|floatformat:2 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Return -->
+
+            <div class="card bg-slate-900 border border-slate-800 shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Overall Return
+                    </p>
+
+                    {% if total_return_percentage >= 0 %}
+
+                        <p class="text-2xl font-bold wt-positive mt-2">
+                            +{{ total_return_percentage|floatformat:2 }}%
+                        </p>
+
+                    {% else %}
+
+                        <p class="text-2xl font-bold wt-negative mt-2">
+                            {{ total_return_percentage|floatformat:2 }}%
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- My Portfolios -->
+    <!-- ========================================================= -->
+
+    <section>
+
+        <div class="flex justify-between items-center mb-4">
+
+            <div>
+
+                <h2 class="wt-section-title">
+                    My Portfolios
+                </h2>
+
+                <p class="text-sm text-slate-400 mt-1">
+                    Your investment portfolios.
+                </p>
+
+            </div>
+
+            <a href="{% url 'create_portfolio' %}"
+               class="text-sm text-blue-400
+                      hover:text-blue-300
+                      transition-colors">
+
+                + Create Portfolio
+
+            </a>
+
+        </div>
+
+
+        {% if portfolios %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+
+                {% for portfolio in portfolios %}
+
+                    <a href="{% url 'portfolio' portfolio.id %}"
+                       class="group">
+
+                        <div class="card
+                                    bg-slate-900
+                                    border border-slate-800
+                                    shadow-xl
+                                    transition-all
+                                    duration-200
+                                    group-hover:border-slate-700
+                                    group-hover:-translate-y-0.5">
+
+                            <div class="card-body">
+
+                                <div class="flex justify-between items-start">
+
+                                    <div>
+
+                                        <p class="text-xs
+                                                  text-slate-500
+                                                  uppercase
+                                                  tracking-wider">
+
+                                            Portfolio
+
+                                        </p>
+
+                                        <h3 class="text-xl
+                                                   font-semibold
+                                                   text-white
+                                                   mt-1">
+
+                                            {{ portfolio.name }}
+
+                                        </h3>
+
+                                    </div>
+
+
+                                    <span class="text-slate-500
+                                                 group-hover:text-blue-400
+                                                 transition-colors">
+
+                                        →
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="mt-6
+                                            flex items-center
+                                            justify-between
+                                            text-sm">
+
+                                    <span class="text-slate-400">
+
+                                        {{ portfolio.base_currency }}
+
+                                    </span>
+
+                                    <span class="text-slate-500">
+
+                                        Created
+                                        {{ portfolio.created_at|date:"d M Y" }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800">
+
+                <div class="card-body text-center py-12">
+
+                    <h3 class="text-lg font-semibold text-white">
+                        No portfolios yet
+                    </h3>
+
+                    <p class="text-slate-400 mt-2">
+                        Create your first portfolio to start tracking
+                        your investments.
+                    </p>
+
+                    <div class="mt-5">
+
+                        <a href="{% url 'create_portfolio' %}"
+                           class="btn btn-primary">
+
+                            Create Portfolio
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+<!-- ========================================================= -->
+<!-- Portfolio Allocation -->
+<!-- ========================================================= -->
+
+<section>
+
+    <div class="mb-5">
+
+        <h2 class="wt-section-title">
+            Portfolio Allocation
+        </h2>
+
+        <p class="text-sm text-slate-400 mt-1">
+            See how your investments are distributed across assets and sectors.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+
+        <!-- ================================================= -->
+        <!-- Asset Allocation -->
+        <!-- ================================================= -->
+
+        <div class="card
+                    bg-slate-900
+                    border border-slate-800
+                    shadow-xl">
+
+            <div class="card-body">
+
+                <h3 class="text-lg font-semibold text-white mb-4">
+                    Asset Allocation
+                </h3>
+
+
+                <div class="relative h-80">
+
+                    <canvas id="dashboardAssetAllocationChart"></canvas>
+
+                </div>
+
+
+                <!-- Asset Table -->
+
+                <div class="mt-8 overflow-x-auto">
+
+                    <table class="table w-full">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Asset</th>
+
+                                <th>Value</th>
+
+                                <th>Allocation</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for symbol, data in combined_asset_allocation.items %}
+
+                            <tr class="hover">
+
+                                <td class="font-medium">
+
+                                    {{ symbol }}
+
+                                </td>
+
+
+                                <td>
+
+                                    ₹{{ data.value|floatformat:2 }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ data.allocation_percentage|floatformat:2 }}%
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="3"
+                                    class="text-center
+                                           py-8
+                                           text-slate-400">
+
+                                    No holdings found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- Sector Allocation -->
+        <!-- ================================================= -->
+
+        <div class="card
+                    bg-slate-900
+                    border border-slate-800
+                    shadow-xl">
+
+            <div class="card-body">
+
+                <h3 class="text-lg font-semibold text-white mb-4">
+                    Sector Allocation
+                </h3>
+
+
+                <div class="relative h-80">
+
+                    <canvas id="dashboardSectorAllocationChart"></canvas>
+
+                </div>
+
+
+                <!-- Sector Table -->
+
+                <div class="mt-8 overflow-x-auto">
+
+                    <table class="table w-full">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Sector</th>
+
+                                <th>Value</th>
+
+                                <th>Allocation</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for sector, data in combined_sector_allocation.items %}
+
+                            <tr class="hover">
+
+                                <td class="font-medium">
+
+                                    {{ sector }}
+
+                                </td>
+
+
+                                <td>
+
+                                    ₹{{ data.value|floatformat:2 }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ data.allocation_percentage|floatformat:2 }}%
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="3"
+                                    class="text-center
+                                           py-8
+                                           text-slate-400">
+
+                                    No sectors found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{{ asset_labels|json_script:"dashboard-asset-labels" }}
+{{ asset_values|json_script:"dashboard-asset-values" }}
+
+{{ sector_labels|json_script:"dashboard-sector-labels" }}
+{{ sector_values|json_script:"dashboard-sector-values" }}
 
 {% endblock content %}
+
+
+{% block scripts %}
+
+{% load static %}
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+{% endblock scripts %}

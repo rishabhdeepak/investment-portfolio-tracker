@@ -2,91 +2,468 @@
 
 {% block content %}
 
-<h1>{{ asset.name }}</h1>
+<div class="space-y-10">
 
-<p>
-    Symbol: {{ asset.symbol }}
-</p>
 
-<p>
-    Asset Type: {{ asset.asset_type }}
-</p>
+    <!-- ========================================================= -->
+    <!-- Asset Header -->
+    <!-- ========================================================= -->
 
-<p>
-    Exchange: {{ asset.exchange }}
-</p>
+    <div>
 
-<p>
-    Sector: {{ asset.sector }}
-</p>
+        <p class="wt-label mb-2">
+            ASSET
+        </p>
 
-<p>
-    Industry: {{ asset.industry }}
-</p>
+        <div class="flex justify-between items-start">
 
-{% if holding %}
+            <div>
 
-<p>
-    Quantity Held: {{ holding.quantity }}
-</p>
+                <h1 class="text-4xl font-bold tracking-tight text-white">
+                    {{ asset.name }}
+                </h1>
 
-<p>
-    Average Buy Price:
-    {{ holding.avg_buy_price|floatformat:2 }}
-</p>
+                <div class="flex items-center gap-4 mt-3">
 
-<p>
-    Current Price:
-    {{ holding.current_price|floatformat:2 }}
-</p>
+                    <span class="text-slate-400">
+                        {{ asset.symbol }}
+                    </span>
 
-<p>
-    Current Value:
-    {{ holding.current_value|floatformat:2 }}
-</p>
+                    {% if asset.exchange %}
 
-<p>
-    Allocation:
-    {{ holding.allocation_percentage|floatformat:2 }}%
-</p>
+                        <span class="text-slate-600">
+                            •
+                        </span>
 
-<p>
-    Profit/Loss:
-    {{ holding.profit_loss|floatformat:2 }}
-</p>
+                        <span class="text-slate-400">
+                            {{ asset.exchange }}
+                        </span>
 
-{% endif %}
+                    {% endif %}
 
-<h2>Transactions</h2>
+                    {% if asset.sector %}
 
-{% for transaction in transactions %}
+                        <span class="text-slate-600">
+                            •
+                        </span>
 
-<div>
+                        <span class="text-slate-400">
+                            {{ asset.sector }}
+                        </span>
 
-    <p>
-        {{ transaction.transaction_type }}
-    </p>
+                    {% endif %}
 
-    <p>
-        Quantity: {{ transaction.quantity }}
-    </p>
+                </div>
 
-    <p>
-        Price: {{ transaction.price }}
-    </p>
+            </div>
 
-    <p>
-        Date: {{ transaction.transaction_date }}
-    </p>
+        </div>
+
+    </div>
+
+
+    {% if holding %}
+
+
+    <!-- ========================================================= -->
+    <!-- Holding Summary -->
+    <!-- ========================================================= -->
+
+    <section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+
+
+            <!-- Quantity -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Quantity Held
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        {{ holding.quantity }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Average Buy Price -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Average Buy Price
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        ₹{{ holding.avg_buy_price|floatformat:2 }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Current Price -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Current Price
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        ₹{{ holding.current_price|floatformat:2 }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Current Value -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Current Value
+                    </p>
+
+                    <p class="text-2xl font-bold text-white mt-2">
+                        ₹{{ holding.current_value|floatformat:2 }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- Performance -->
+    <!-- ========================================================= -->
+
+    <section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+            <!-- Allocation -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Portfolio Allocation
+                    </p>
+
+                    <p class="text-3xl font-bold text-white mt-2">
+                        {{ holding.allocation_percentage|floatformat:2 }}%
+                    </p>
+
+                    <p class="text-sm text-slate-500 mt-2">
+                        Share of this portfolio
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Profit / Loss -->
+
+            <div class="card
+                        bg-slate-900
+                        border border-slate-800
+                        shadow-xl">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-slate-400">
+                        Profit / Loss
+                    </p>
+
+                    {% if holding.profit_loss >= 0 %}
+
+                        <p class="text-3xl font-bold wt-positive mt-2">
+                            +₹{{ holding.profit_loss|floatformat:2 }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="text-3xl font-bold wt-negative mt-2">
+                            ₹{{ holding.profit_loss|floatformat:2 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {% endif %}
+
+
+    <!-- ========================================================= -->
+    <!-- Asset Information -->
+    <!-- ========================================================= -->
+
+    <section>
+
+        <div class="mb-5">
+
+            <h2 class="wt-section-title">
+                Asset Information
+            </h2>
+
+        </div>
+
+
+        <div class="card
+                    bg-slate-900
+                    border border-slate-800
+                    shadow-xl">
+
+            <div class="card-body">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+
+                    <!-- Asset Type -->
+
+                    <div>
+
+                        <p class="text-sm text-slate-400">
+                            Asset Type
+                        </p>
+
+                        <p class="font-medium text-white mt-1">
+                            {{ asset.asset_type|default:"—" }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Exchange -->
+
+                    <div>
+
+                        <p class="text-sm text-slate-400">
+                            Exchange
+                        </p>
+
+                        <p class="font-medium text-white mt-1">
+                            {{ asset.exchange|default:"—" }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Sector -->
+
+                    <div>
+
+                        <p class="text-sm text-slate-400">
+                            Sector
+                        </p>
+
+                        <p class="font-medium text-white mt-1">
+                            {{ asset.sector|default:"—" }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Industry -->
+
+                    <div>
+
+                        <p class="text-sm text-slate-400">
+                            Industry
+                        </p>
+
+                        <p class="font-medium text-white mt-1">
+                            {{ asset.industry|default:"—" }}
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- Transaction History -->
+    <!-- ========================================================= -->
+
+    <section>
+
+        <div class="mb-5">
+
+            <h2 class="wt-section-title">
+                Transaction History
+            </h2>
+
+            <p class="text-sm text-slate-400 mt-1">
+                All transactions associated with this asset.
+            </p>
+
+        </div>
+
+
+        <div class="card
+                    bg-slate-900
+                    border border-slate-800
+                    shadow-xl">
+
+            <div class="card-body">
+
+                <div class="overflow-x-auto">
+
+                    <table class="table w-full">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Date</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for transaction in transactions %}
+
+                            <tr class="hover">
+
+
+                                <!-- Transaction Type -->
+
+                                <td>
+
+                                    {% if transaction.transaction_type == "BUY" %}
+
+                                        <span class="wt-positive font-semibold">
+                                            BUY
+                                        </span>
+
+                                    {% elif transaction.transaction_type == "SELL" %}
+
+                                        <span class="wt-negative font-semibold">
+                                            SELL
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-slate-300 font-semibold">
+                                            {{ transaction.transaction_type }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Quantity -->
+
+                                <td>
+                                    {{ transaction.quantity }}
+                                </td>
+
+
+                                <!-- Price -->
+
+                                <td>
+                                    ₹{{ transaction.price|floatformat:2 }}
+                                </td>
+
+
+                                <!-- Date -->
+
+                                <td class="text-slate-400">
+                                    {{ transaction.transaction_date|date:"d M Y" }}
+                                </td>
+
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="4"
+                                    class="text-center
+                                           py-10
+                                           text-slate-400">
+
+                                    No transactions found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
-
-<hr>
-
-{% empty %}
-
-<p>No transactions found.</p>
-
-{% endfor %}
 
 {% endblock content %}

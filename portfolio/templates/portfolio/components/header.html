@@ -2,6 +2,8 @@
 
     <div class="flex justify-between items-start">
 
+        <!-- Portfolio Information -->
+
         <div>
 
             <p class="wt-label mb-2">
@@ -30,19 +32,69 @@
 
         </div>
 
-        <div class="flex gap-3">
+
+        <!-- Portfolio Actions -->
+
+        <div class="flex items-center gap-3">
+
+            <!-- New Transaction -->
 
             <a href="{% url 'create_transaction' portfolio.id %}"
-               class="btn btn-primary">
+               class="btn btn-primary flex items-center gap-2">
 
-                New Transaction
+                <i data-lucide="plus"
+                   class="w-4 h-4">
+                </i>
+
+                <span>
+                    New Transaction
+                </span>
 
             </a>
 
-            <a href="{% url 'update_portfolio' portfolio.id %}"
-               class="btn btn-outline">
 
-                Edit
+            <!-- Edit Portfolio -->
+
+            <a href="{% url 'update_portfolio' portfolio.id %}"
+               class="btn btn-outline flex items-center gap-2">
+
+                <i data-lucide="pencil"
+                   class="w-4 h-4">
+                </i>
+
+                <span>
+                    Edit
+                </span>
+
+            </a>
+
+
+            <!-- Delete Portfolio -->
+
+            <a href="{% url 'delete_portfolio' portfolio.id %}"
+               class="btn btn-outline flex items-center gap-2"
+               style="
+                   border-color: #ef4444;
+                   color: #f87171;
+               "
+               onmouseover="
+                   this.style.backgroundColor='rgba(239,68,68,0.1)';
+                   this.style.borderColor='#f87171';
+                   this.style.color='#fca5a5';
+               "
+               onmouseout="
+                   this.style.backgroundColor='';
+                   this.style.borderColor='#ef4444';
+                   this.style.color='#f87171';
+               ">
+
+                <i data-lucide="trash-2"
+                   class="w-4 h-4">
+                </i>
+
+                <span>
+                    Delete
+                </span>
 
             </a>
 

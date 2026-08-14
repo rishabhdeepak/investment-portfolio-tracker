@@ -1,39 +1,276 @@
-<h2>Transaction History</h2>
+<div class="wt-card p-6 mb-10">
 
-{% for transaction in transactions %}
+    <div class="flex items-center justify-between mb-6">
 
-<div>
-	<p>
-		<strong>{{transaction.transaction_type}}</strong>
-		-
-		{{transaction.asset.name}}
-	</p>
-	<p>
-		Quantity: {{transaction.quantity}}
-	</p>
-	<p>
-		Price: {{transaction.price}}
-	</p>
-	<p>
-		Fees: {{transaction.fees}}
-	</p>
-	<p>
-		Taxes: {{transaction.taxes}}
-	</p>
-	<p>
-		Date: {{transaction.transaction_date}}
-	</p>
-	<a href="{% url 'update_transaction' portfolio.id transaction.id %}">
-		Edit Transaction
-	</a><br>
-	<a href="{% url 'delete_transaction' portfolio.id transaction.id %}">
-		Delete Transaction
-	</a>
+        <div>
+
+            <h2 class="text-xl font-semibold text-white">
+                Transaction History
+            </h2>
+
+            <p class="text-sm text-slate-400 mt-1">
+                Recent activity in this portfolio
+            </p>
+
+        </div>
+
+
+        <!-- Add Transaction -->
+
+        <a href="{% url 'create_transaction' portfolio.id %}"
+           class="btn btn-primary btn-sm flex items-center gap-2">
+
+            <i data-lucide="plus"
+               class="w-4 h-4">
+            </i>
+
+            <span>
+                Transaction
+            </span>
+
+        </a>
+
+    </div>
+
+
+    {% if transactions %}
+
+        <div class="space-y-3">
+
+            {% for transaction in transactions %}
+
+                <div class="flex items-center gap-4 p-4 rounded-xl
+                            bg-slate-900/50
+                            border border-slate-800
+                            hover:bg-slate-800/60
+                            transition-colors">
+
+
+                    <!-- ================================================= -->
+                    <!-- Transaction Type -->
+                    <!-- ================================================= -->
+
+                    {% if transaction.transaction_type == "BUY" %}
+
+                        <div class="w-16 h-10 rounded-lg
+                                    flex items-center justify-center gap-1.5
+                                    flex-shrink-0
+                                    bg-emerald-500/10
+                                    border border-emerald-500/20">
+
+                            <i data-lucide="shopping-bag"
+                               class="w-4 h-4 text-emerald-400">
+                            </i>
+
+                            <span class="text-xs font-bold text-emerald-400">
+                                BUY
+                            </span>
+
+                        </div>
+
+
+                    {% elif transaction.transaction_type == "SELL" %}
+
+                        <div class="w-16 h-10 rounded-lg
+                                    flex items-center justify-center gap-1.5
+                                    flex-shrink-0
+                                    bg-red-500/10
+                                    border border-red-500/20">
+
+                            <i data-lucide="banknote-arrow-up"
+                               class="w-4 h-4 text-red-400">
+                            </i>
+
+                            <span class="text-xs font-bold text-red-400">
+                                SELL
+                            </span>
+
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="w-16 h-10 rounded-lg
+                                    flex items-center justify-center gap-1.5
+                                    flex-shrink-0
+                                    bg-slate-800
+                                    border border-slate-700">
+
+                            <i data-lucide="circle-dot"
+                               class="w-4 h-4 text-slate-400">
+                            </i>
+
+                            <span class="text-xs font-bold text-slate-400">
+                                {{ transaction.transaction_type }}
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ================================================= -->
+                    <!-- Asset -->
+                    <!-- ================================================= -->
+
+                    <div class="flex-1 min-w-0">
+
+                        <p class="font-semibold text-white truncate">
+
+                            {{ transaction.asset.name }}
+
+                        </p>
+
+                        <p class="text-sm text-slate-500 mt-1">
+
+                            {{ transaction.asset.symbol }}
+
+                            ·
+
+                            {{ transaction.transaction_date|date:"d M Y" }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- Quantity -->
+                    <!-- ================================================= -->
+
+                    <div class="hidden sm:block text-right">
+
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">
+                            Quantity
+                        </p>
+
+                        <p class="text-sm font-medium text-slate-300 mt-1">
+                            {{ transaction.quantity }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- Price -->
+                    <!-- ================================================= -->
+
+                    <div class="hidden md:block text-right">
+
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">
+                            Price
+                        </p>
+
+                        <p class="text-sm font-medium text-slate-300 mt-1">
+                            ₹{{ transaction.price|floatformat:2 }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- Fees / Taxes -->
+                    <!-- ================================================= -->
+
+                    <div class="hidden lg:block text-right">
+
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">
+                            Costs
+                        </p>
+
+                        <p class="text-sm font-medium text-slate-300 mt-1">
+
+                            ₹{{ transaction.fees|floatformat:2 }}
+
+                            +
+
+                            ₹{{ transaction.taxes|floatformat:2 }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- Actions -->
+                    <!-- ================================================= -->
+
+                    <div class="flex items-center gap-2">
+
+
+                        <!-- Edit -->
+
+                        <a href="{% url 'update_transaction' portfolio.id transaction.id %}"
+                           class="flex items-center justify-center
+                                  w-8 h-8 rounded-lg
+                                  text-slate-400
+                                  hover:text-white
+                                  hover:bg-slate-800
+                                  transition-colors"
+                           title="Edit transaction">
+
+                            <i data-lucide="pencil"
+                               class="w-4 h-4">
+                            </i>
+
+                        </a>
+
+
+                        <!-- Delete -->
+
+                        <a href="{% url 'delete_transaction' portfolio.id transaction.id %}"
+                           class="flex items-center justify-center
+                                  w-8 h-8 rounded-lg
+                                  text-red-400
+                                  hover:text-red-300
+                                  hover:bg-red-500/10
+                                  transition-colors"
+                           title="Delete transaction">
+
+                            <i data-lucide="trash-2"
+                               class="w-4 h-4">
+                            </i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <!-- ========================================================= -->
+        <!-- Empty State -->
+        <!-- ========================================================= -->
+
+        <div class="py-12 text-center">
+
+            <p class="text-slate-400">
+                No transactions found for this portfolio.
+            </p>
+
+
+            <a href="{% url 'create_transaction' portfolio.id %}"
+               class="btn btn-primary btn-sm mt-4
+                      inline-flex items-center gap-2">
+
+                <i data-lucide="plus"
+                   class="w-4 h-4">
+                </i>
+
+                <span>
+                    Add your first transaction
+                </span>
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
 </div>
-<hr>
-
-{% empty %}
-
-	<p>No transactions found for this portfolio.</p>
-
-{% endfor %}

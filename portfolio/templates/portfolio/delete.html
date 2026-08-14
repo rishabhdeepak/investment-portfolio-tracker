@@ -1,10 +1,100 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Are you sure you want to delete {{obj}}?</p>
-<a href="{{request.META.HTTP_REFERER}}">Cancel</a>
-<form method="POST">
-	{% csrf_token %}
-	<button type="submit">Delete</button>
-</form>
+
+<div class="max-w-lg mx-auto">
+
+    <div class="wt-card p-8">
+
+        <!-- Warning -->
+
+        <div class="w-12 h-12 rounded-xl
+                    bg-red-500/10
+                    border border-red-500/20
+                    flex items-center justify-center
+                    mb-6">
+
+            <span class="text-red-400 text-2xl font-semibold">
+                !
+            </span>
+
+        </div>
+
+
+        <!-- Heading -->
+
+        <h1 class="text-2xl font-bold text-white">
+
+            Delete {{ object_type }}?
+
+        </h1>
+
+
+        <p class="text-slate-400 mt-2 leading-relaxed">
+
+            This action cannot be undone.
+            The following {{ object_type|lower }}
+            will be permanently removed.
+
+        </p>
+
+
+        <!-- Object Details -->
+
+        <div class="mt-6 p-4 rounded-xl
+                    bg-slate-900
+                    border border-slate-800">
+
+            <p class="font-semibold text-white">
+
+                {{ obj }}
+
+            </p>
+
+        </div>
+
+
+        <!-- Actions -->
+
+        <div class="flex items-center justify-end gap-3 mt-8">
+
+            <a href="{{ request.META.HTTP_REFERER }}"
+               class="px-5 py-2.5 rounded-lg
+                      border border-slate-700
+                      text-sm font-medium
+                      text-slate-300
+                      hover:bg-slate-800
+                      hover:text-white
+                      transition-colors">
+
+                Cancel
+
+            </a>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="px-5 py-2.5 rounded-lg
+                           bg-red-500
+                           text-white
+                           text-sm font-semibold
+                           hover:bg-red-400
+                           transition-colors">
+
+                    Delete {{ object_type }}
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock content %}
