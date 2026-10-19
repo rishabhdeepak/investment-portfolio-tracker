@@ -20,6 +20,7 @@ def search_mutual_funds(query):
 				"exchange": "",
 				"sector": "",
 				"industry": "",
+				"quote_currency": "INR",
 			})
 
 		return results[:10]
