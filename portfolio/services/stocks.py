@@ -28,13 +28,27 @@ def search_assets(query):
     search = yf.Search(query)
     results = []
     for item in search.quotes:
-        if item.get('quoteType') not in ['EQUITY','ETF','CRYPTOCURRENCY']:
+        if item.get('quoteType') not in [
+            'EQUITY',
+            'ETF',
+            'CRYPTOCURRENCY',
+        ]:
             continue
+        symbol = item.get('symbol')
+        if not symbol:
+            continue
+        try:
+            ticker_obj = yf.Ticker(symbol)
+            currency = ticker_obj.fast_info.get('currency')
+        except Exception:
+            currency = None
         results.append({
-            'symbol': item.get('symbol'),
+            'symbol': symbol,
             'name': item.get('longname') or item.get('shortname'),
             'quote_type': item.get('quoteType'),
             'exchange': item.get('exchDisp'),
             'sector': item.get('sector'),
-            'industry': item.get('industryDisp')})
+            'industry': item.get('industryDisp'),
+            'quote_currency': currency,
+        })
     return results[:10]
