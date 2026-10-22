@@ -87,13 +87,14 @@ def create_transaction(request, portfolio_id):
 			}
 		
 		asset, created = Asset.objects.get_or_create(
-			symbol=symbol,
-			defaults= {'name': asset_name,
-			'asset_type': asset_type_map.get(quote_type, 'STOCK'),
-			'exchange' : exchange or '',
-			'sector' : sector or '',
-			'industry': industry or ''
-					 })
+    	symbol=symbol,
+    	defaults={
+        'name': asset_name,
+        'asset_type': asset_type_map.get(quote_type, 'STOCK'),
+        'exchange': exchange or '',
+        'sector': sector or '',
+        'industry': industry or '',
+        'quote_currency': request.POST.get('quote_currency') or None,})
 
 		form.instance.portfolio = portfolio
 		form.instance.asset = asset

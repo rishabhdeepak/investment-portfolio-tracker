@@ -113,6 +113,10 @@
                    id="selected-industry"
                    name="industry">
 
+            <input type="hidden"
+                   id="selected-currency"
+                   name="quote_currency">
+
 
             <div class="border-t border-slate-800 pt-8">
 
@@ -461,6 +465,10 @@ searchBox.addEventListener('input', () => {
                     document.getElementById(
                         'selected-industry'
                     ).value = asset.industry || '';
+
+                    document.getElementById(
+                        'selected-currency'
+                    ).value = asset.quote_currency || '';
 
 
                     searchBox.value =

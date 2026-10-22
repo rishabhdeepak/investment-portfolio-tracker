@@ -181,6 +181,8 @@ class Asset(models.Model):
 
     industry = models.CharField(max_length=100, blank=True)
 
+    quote_currency = models.CharField(max_length=3, null=True, blank=True,)
+
     def __str__(self):
         return f"{self.symbol} - {self.name}"
 
