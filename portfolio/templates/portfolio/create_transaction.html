@@ -387,15 +387,31 @@
 
 
 
+
 <script>
 const searchBox = document.getElementById('asset-search');
 const resultsDiv = document.getElementById('search-results');
+const transactionForm = document.querySelector('form[method="POST"]');
 
 const transactionTypeSelect = document.getElementById(
     '{{ form.transaction_type.id_for_label }}'
 );
 
-// Frontend-only: remove IMPORT and the blank placeholder.
+const assetFields = {
+    symbol: document.getElementById('selected-symbol'),
+    name: document.getElementById('selected-name'),
+    type: document.getElementById('selected-type'),
+    exchange: document.getElementById('selected-exchange'),
+    sector: document.getElementById('selected-sector'),
+    industry: document.getElementById('selected-industry'),
+    currency: document.getElementById('selected-currency')
+};
+
+let searchTimeout;
+let searchRequest = 0;
+let selectedAsset = false;
+
+// Remove IMPORT and the blank placeholder (frontend only).
 if (transactionTypeSelect) {
     Array.from(transactionTypeSelect.options).forEach(option => {
         if (option.value === 'IMPORT' || option.value === '') {
@@ -406,19 +422,31 @@ if (transactionTypeSelect) {
     transactionTypeSelect.value = 'BUY';
 }
 
-let searchTimeout;
+function clearSelectedAsset() {
+    selectedAsset = false;
+
+    Object.values(assetFields).forEach(field => {
+        if (field) {
+            field.value = '';
+        }
+    });
+}
 
 searchBox.addEventListener('input', () => {
     clearTimeout(searchTimeout);
 
+    // Editing the query invalidates any previous asset selection.
+    clearSelectedAsset();
+    resultsDiv.innerHTML = '';
+
+    const query = searchBox.value.trim();
+    const requestId = ++searchRequest;
+
+    if (query.length < 2) {
+        return;
+    }
+
     searchTimeout = setTimeout(async () => {
-        const query = searchBox.value.trim();
-
-        if (query.length < 2) {
-            resultsDiv.innerHTML = '';
-            return;
-        }
-
         try {
             const response = await fetch(
                 `/portfolio/search-assets/?q=${encodeURIComponent(query)}`
@@ -429,6 +457,12 @@ searchBox.addEventListener('input', () => {
             }
 
             const results = await response.json();
+
+            // Ignore results from an older search request.
+            if (requestId !== searchRequest) {
+                return;
+            }
+
             resultsDiv.innerHTML = '';
 
             results
@@ -443,26 +477,16 @@ searchBox.addEventListener('input', () => {
                         'cursor-pointer transition-colors';
 
                     div.addEventListener('click', () => {
-                        document.getElementById('selected-symbol').value =
-                            asset.symbol;
-
-                        document.getElementById('selected-name').value =
-                            asset.name;
-
-                        document.getElementById('selected-type').value =
-                            asset.quote_type;
-
-                        document.getElementById('selected-exchange').value =
-                            asset.exchange || '';
-
-                        document.getElementById('selected-sector').value =
-                            asset.sector || '';
-
-                        document.getElementById('selected-industry').value =
-                            asset.industry || '';
-
-                        document.getElementById('selected-currency').value =
+                        assetFields.symbol.value = asset.symbol;
+                        assetFields.name.value = asset.name;
+                        assetFields.type.value = asset.quote_type;
+                        assetFields.exchange.value = asset.exchange || '';
+                        assetFields.sector.value = asset.sector || '';
+                        assetFields.industry.value = asset.industry || '';
+                        assetFields.currency.value =
                             asset.quote_currency || '';
+
+                        selectedAsset = true;
 
                         searchBox.value =
                             `${asset.name} (${asset.symbol})`;
@@ -474,12 +498,34 @@ searchBox.addEventListener('input', () => {
                 });
 
         } catch (error) {
-            console.error('Asset search error:', error);
-            resultsDiv.innerHTML = '';
+            if (requestId === searchRequest) {
+                console.error('Asset search error:', error);
+                resultsDiv.innerHTML = '';
+            }
         }
     }, 400);
 });
+
+// Require a selected search result before submitting.
+if (transactionForm) {
+    transactionForm.addEventListener('submit', event => {
+        if (
+            !selectedAsset ||
+            !assetFields.symbol.value ||
+            !assetFields.name.value
+        ) {
+            event.preventDefault();
+
+            alert(
+                'Please select an asset from the search results first.'
+            );
+
+            searchBox.focus();
+        }
+    });
+}
 </script>
+
 
 
 {% endblock content %}
