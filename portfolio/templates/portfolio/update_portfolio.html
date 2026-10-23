@@ -37,6 +37,8 @@
 
             {% csrf_token %}
 
+            <input type="hidden" name="base_currency" value="{{ form.instance.base_currency }}">
+
 
             {% if form.non_field_errors %}
 
@@ -72,34 +74,6 @@
                     <div class="mt-2 text-sm text-red-400">
 
                         {{ form.name.errors }}
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- Base Currency -->
-
-            <div class="mb-8">
-
-                <label
-                    for="{{ form.base_currency.id_for_label }}"
-                    class="block text-sm font-medium
-                           text-slate-300 mb-2">
-
-                    {{ form.base_currency.label }}
-
-                </label>
-
-                {{ form.base_currency }}
-
-                {% if form.base_currency.errors %}
-
-                    <div class="mt-2 text-sm text-red-400">
-
-                        {{ form.base_currency.errors }}
 
                     </div>
 

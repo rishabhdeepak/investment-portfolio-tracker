@@ -386,117 +386,100 @@
 </div>
 
 
-<script>
 
+<script>
 const searchBox = document.getElementById('asset-search');
 const resultsDiv = document.getElementById('search-results');
 
+const transactionTypeSelect = document.getElementById(
+    '{{ form.transaction_type.id_for_label }}'
+);
+
+// Frontend-only: remove IMPORT and the blank placeholder.
+if (transactionTypeSelect) {
+    Array.from(transactionTypeSelect.options).forEach(option => {
+        if (option.value === 'IMPORT' || option.value === '') {
+            option.remove();
+        }
+    });
+
+    transactionTypeSelect.value = 'BUY';
+}
+
 let searchTimeout;
 
-
 searchBox.addEventListener('input', () => {
-
     clearTimeout(searchTimeout);
 
     searchTimeout = setTimeout(async () => {
-
         const query = searchBox.value.trim();
 
         if (query.length < 2) {
-
             resultsDiv.innerHTML = '';
-
             return;
-
         }
 
-
         try {
-
             const response = await fetch(
                 `/portfolio/search-assets/?q=${encodeURIComponent(query)}`
             );
 
+            if (!response.ok) {
+                throw new Error('Asset search failed');
+            }
+
             const results = await response.json();
-
             resultsDiv.innerHTML = '';
-
 
             results
                 .filter(asset => asset.quote_currency === 'INR')
                 .forEach(asset => {
+                    const div = document.createElement('div');
 
-                const div = document.createElement('div');
+                    div.innerText = `${asset.name} (${asset.symbol})`;
+                    div.className =
+                        'px-4 py-3 text-sm text-slate-300 ' +
+                        'hover:bg-slate-800 hover:text-white ' +
+                        'cursor-pointer transition-colors';
 
-                div.innerText =
-                    `${asset.name} (${asset.symbol})`;
+                    div.addEventListener('click', () => {
+                        document.getElementById('selected-symbol').value =
+                            asset.symbol;
 
-                div.className =
-                    'px-4 py-3 text-sm text-slate-300 ' +
-                    'hover:bg-slate-800 hover:text-white ' +
-                    'cursor-pointer transition-colors';
+                        document.getElementById('selected-name').value =
+                            asset.name;
 
+                        document.getElementById('selected-type').value =
+                            asset.quote_type;
 
-                div.addEventListener('click', () => {
+                        document.getElementById('selected-exchange').value =
+                            asset.exchange || '';
 
-                    document.getElementById(
-                        'selected-symbol'
-                    ).value = asset.symbol;
+                        document.getElementById('selected-sector').value =
+                            asset.sector || '';
 
+                        document.getElementById('selected-industry').value =
+                            asset.industry || '';
 
-                    document.getElementById(
-                        'selected-name'
-                    ).value = asset.name;
+                        document.getElementById('selected-currency').value =
+                            asset.quote_currency || '';
 
+                        searchBox.value =
+                            `${asset.name} (${asset.symbol})`;
 
-                    document.getElementById(
-                        'selected-type'
-                    ).value = asset.quote_type;
+                        resultsDiv.innerHTML = '';
+                    });
 
-
-                    document.getElementById(
-                        'selected-exchange'
-                    ).value = asset.exchange || '';
-
-
-                    document.getElementById(
-                        'selected-sector'
-                    ).value = asset.sector || '';
-
-
-                    document.getElementById(
-                        'selected-industry'
-                    ).value = asset.industry || '';
-
-                    document.getElementById(
-                        'selected-currency'
-                    ).value = asset.quote_currency || '';
-
-
-                    searchBox.value =
-                        `${asset.name} (${asset.symbol})`;
-
-                    resultsDiv.innerHTML = '';
-
+                    resultsDiv.appendChild(div);
                 });
 
-
-                resultsDiv.appendChild(div);
-
-            });
-
+        } catch (error) {
+            console.error('Asset search error:', error);
+            resultsDiv.innerHTML = '';
         }
-
-        catch (error) {
-
-            console.error("Fetch Error:", error);
-
-        }
-
     }, 400);
-
 });
-
 </script>
+
 
 {% endblock content %}

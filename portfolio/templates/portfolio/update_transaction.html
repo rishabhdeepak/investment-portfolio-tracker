@@ -288,4 +288,19 @@
 
 </div>
 
+
+<script>
+const transactionTypeSelect = document.getElementById(
+    '{{ form.transaction_type.id_for_label }}'
+);
+
+if (transactionTypeSelect) {
+    Array.from(transactionTypeSelect.options).forEach(option => {
+        if (option.value === 'IMPORT' || option.value === '') {
+            option.remove();
+        }
+    });
+}
+</script>
+
 {% endblock content %}
