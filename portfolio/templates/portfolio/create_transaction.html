@@ -422,7 +422,9 @@ searchBox.addEventListener('input', () => {
             resultsDiv.innerHTML = '';
 
 
-            results.forEach(asset => {
+            results
+                .filter(asset => asset.quote_currency === 'INR')
+                .forEach(asset => {
 
                 const div = document.createElement('div');
 
