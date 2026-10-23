@@ -507,8 +507,10 @@ searchBox.addEventListener('input', () => {
 });
 
 // Require a selected search result before submitting.
+
 if (transactionForm) {
     transactionForm.addEventListener('submit', event => {
+        // Require an asset selected from the search results.
         if (
             !selectedAsset ||
             !assetFields.symbol.value ||
@@ -521,9 +523,56 @@ if (transactionForm) {
             );
 
             searchBox.focus();
+            return;
+        }
+
+        // Reject negative or invalid numeric values.
+        // Zero is accepted by this frontend check.
+        const numericFields = [
+            {
+                id: '{{ form.quantity.id_for_label }}',
+                name: 'Quantity'
+            },
+            {
+                id: '{{ form.price.id_for_label }}',
+                name: 'Price'
+            },
+            {
+                id: '{{ form.fees.id_for_label }}',
+                name: 'Fees'
+            },
+            {
+                id: '{{ form.taxes.id_for_label }}',
+                name: 'Taxes'
+            }
+        ];
+
+        for (const field of numericFields) {
+            const input = document.getElementById(field.id);
+
+            if (!input) continue;
+
+            const rawValue = input.value.trim();
+            const value = Number(rawValue);
+
+            if (
+                rawValue === '' ||
+                !Number.isFinite(value) ||
+                value < 0
+            ) {
+                event.preventDefault();
+
+                alert(
+                    `${field.name} must be zero or greater.`
+                );
+
+                input.focus();
+                return;
+            }
         }
     });
 }
+
 </script>
 
 
