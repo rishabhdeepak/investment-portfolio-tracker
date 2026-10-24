@@ -49,3 +49,4 @@ websockets==16.0
 whitenoise==6.12.0
 yfinance==1.4.1
 python-dotenv==1.2.4
+honcho==2.0.0
